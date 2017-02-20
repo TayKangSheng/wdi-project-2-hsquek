@@ -37,7 +37,7 @@ const eventSchema = new mongoose.Schema({
   attendees: {
     type: Number
   },
-  category: {
+  status: {
     type: String,
     enum: ['confirmed', 'proposed'],
     default: 'proposed',
