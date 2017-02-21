@@ -1,0 +1,23 @@
+<h1>Events</h1>
+
+
+<div class="row">
+    <h2>Upcoming Events</h2>
+    <% foundEvents.forEach(function (event) { %>
+      <div class="col-md-4">
+      <% if (event.status === 'confirmed') { %>
+        <%= event.name %>
+        <pre>
+          <%= event.description %>
+        </pre>
+        <a href="/events/<%=event.id%>" class="btn btn-primary">View event</a>
+        <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit event</a>
+        <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+        <% } %>
+        </div>
+      <% }) %>
+</div>

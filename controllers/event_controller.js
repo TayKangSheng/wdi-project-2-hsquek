@@ -8,60 +8,92 @@ let EventController = {
         console.error(err)
         return next(err)
       }
-      res.send('all Events listed')
+      res.render('event/index', {
+        foundEvents: foundEvents
+      })
     })
   },
 
   listOne: function (req, res) {
     Event.findById(req.params.id, function (err, foundEvent, next) {
       if (err) {
-        // console.error(err)
-        // return next(err)
-        res.send('err but listOne')
+        console.error(err)
+        return next(err)
+        // res.send('err but listOne')
       }
-      res.send('one event listed')
+      res.render('event/show', {
+        foundEvent: foundEvent
+      })
     })
   },
 
   makeNew: function (req, res) {
-    res.send('create form exists on this page')
+    res.render('event/create')
   },
 
   createNew: function (req, res) {
-    Event.create(req.body, function (err, output, next) {
+    let newEvent = new Event({
+      name: req.body.events.name,
+      date: req.body.events.date,
+      status: req.body.events.status,
+      attendees: req.body.events.attendees,
+      venue: req.body.events.venue,
+      description: req.body.events.description,
+      attachments: req.body.events.attachments
+    })
+
+    newEvent.save(function (err, output, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.send('New event created')
+      console.log(output)
+      res.redirect('/events')
     })
   },
 
-  edit: function (req, res) {
-    res.send('edit form on this page')
+  editForm: function (req, res) {
+    Event.findById(req.params.id, function (err, foundEvent, next) {
+      if (err) {
+        console.error(err)
+        return next(err)
+      }
+      res.render('event/edit', {
+        foundEvent: foundEvent
+      })
+    })
   },
 
-  update: function (req, res) {
+  updateExisting: function (req, res) {
     Event.findByIdAndUpdate(req.params.id,
       {
-        $set: req.body
+        $set: {
+          name: req.body.events.name,
+          date: req.body.events.date,
+          status: req.body.events.status,
+          attendees: req.body.events.attendees,
+          venue: req.body.events.venue,
+          description: req.body.events.description,
+          attachments: req.body.events.attachments
+        }
       },
-    (err, updatedEvent, next) => {
+    function (err, updatedEvent, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.send('item updated')
+      res.redirect('/events/' + updatedEvent.id)
     })
   },
 
-  delete: function (req, res) {
+  deleteRecord: function (req, res) {
     Event.findByIdAndRemove(req.params.id, function (err, output, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.send('item removed')
+      console.log('removed' + req.params.id);
+      res.redirect('/events')
     })
   }
 }

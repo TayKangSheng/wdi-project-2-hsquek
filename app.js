@@ -11,6 +11,7 @@ const app = express()
 mongoose.connect('mongodb://localhost/wdi-proj-2')
 mongoose.Promise = global.Promise
 
+app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(ejsLayouts)
 app.set('view engine', 'ejs')
