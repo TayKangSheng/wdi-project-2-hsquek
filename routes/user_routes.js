@@ -14,4 +14,4 @@ Router.post('/login', UserController.postLogIn)
 
 Router.get('/logout', UserController.logOut)
 
-module.exports = Router;
+module.exports = Router

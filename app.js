@@ -5,11 +5,31 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const ejsLayouts = require('express-ejs-layouts')
 const methodOverride = require('method-override')
-
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const MongoStore = require('connect-mongo')(session)
+const flash = require('connect-flash')
 const app = express()
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost/wdi-proj-2')
+mongoose.connect(process.env.MONGODB_URI)
+
+app.use(cookieParser(process.env.SESSION_SECRET))
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({
+    url: process.env.MONGODB_URI,
+    autoReconnect: true
+  })
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+require('./config/ppConfig')(passport)
+
+app.use(flash())
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,6 +43,15 @@ const AlbumRouter = require('./routes/album_routes')
 app.use(bodyParser.urlencoded({ extended: true }))
 
 let port = 4001
+
+app.use(function(req,res,next) {
+
+  res.locals.user = req.user
+  res.locals.isAuthenticated = req.isAuthenticated()
+
+
+  next()
+})
 
 app.use('/', UserRouter)
 app.use('/albums', AlbumRouter)
