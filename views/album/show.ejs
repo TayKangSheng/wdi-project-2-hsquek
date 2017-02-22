@@ -1,0 +1,19 @@
+<h1> <%= foundAlbum.name %> </h1>
+
+<div class="row">
+      <div class="col-md-4">
+
+        <%= foundAlbum.name %>
+        <pre>
+          <%= foundAlbum.description %>
+        </pre>
+        <a href="/albums/<%=foundAlbum.id%>/update" class="btn btn-primary">Edit album</a>
+        <form method="POST" action="/albums/<%= foundAlbum.id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+
+        </div>
+
+</div>

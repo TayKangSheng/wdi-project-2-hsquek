@@ -1,0 +1,49 @@
+
+<h1>Photo Gallery<span><a href="/albums/new" class="btn btn-primary">Create</a></span></h1>
+
+
+<% if (foundAlbums.length >= 1) { %>
+<div class="row">
+    <h2>Most recent</h2>
+      <div class="col-md-4">
+        <%= foundAlbums[0].name %>
+        <pre>
+          <%= foundAlbums[0].description %>
+        </pre>
+        <a href="/albums/<%=foundAlbums[0].id%>" class="btn btn-primary">View album</a>
+        <a href="/albums/<%=foundAlbums[0].id%>/update" class="btn btn-primary">Edit album</a>
+        <form method="POST" action="/albums/<%= foundAlbums[0].id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete album
+            </button>
+          </form>
+        </div>
+</div>
+<% } %>
+
+
+<% if (foundAlbums.length > 1) { %>
+
+<%  var otherAlbums = foundAlbums.slice(1) %>
+
+
+
+<div class="row">
+    <h2>Other albums</h2>
+    <% otherAlbums.forEach(function (album) { %>
+      <div class="col-md-4">
+        <%= album.name %>
+        <pre>
+          <%= album.description %>
+        </pre>
+        <a href="/albums/<%=album.id%>" class="btn btn-primary">View album</a>
+        <a href="/albums/<%=album.id%>/update" class="btn btn-primary">Edit album</a>
+        <form method="POST" action="/albums/<%= album.id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+        </div>
+      <% }) %>
+</div>
+<% } %>

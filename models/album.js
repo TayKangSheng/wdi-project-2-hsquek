@@ -1,15 +1,18 @@
 const mongoose = require('mongoose')
-const photo = require('./photo.js')
+const Photo = require('./photo')
 
-const albumSchema = new mongoose.Schema({
+var albumSchema = new mongoose.Schema({
   name: {
     type: String,
     default: 'misc'
   },
   date: Date,
-  photos: [photo.PhotoSchema]
+  description: String,
+  photos: {
+    type: [Photo.Schema]
+  }
 })
 
-const Album = mongoose.model('Album', albumSchema)
+var Album = mongoose.model('Album', albumSchema)
 
 module.exports = Album
