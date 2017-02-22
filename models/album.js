@@ -6,6 +6,7 @@ const albumSchema = new mongoose.Schema({
     type: String,
     default: 'misc'
   },
+  date: Date,
   photos: [photo.PhotoSchema]
 })
 

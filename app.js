@@ -6,10 +6,12 @@ const bodyParser = require('body-parser')
 const ejsLayouts = require('express-ejs-layouts')
 const methodOverride = require('method-override')
 
+
 const app = express()
 
-mongoose.connect('mongodb://localhost/wdi-proj-2')
 mongoose.Promise = global.Promise
+mongoose.connect('mongodb://localhost/wdi-proj-2')
+
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }))

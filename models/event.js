@@ -1,17 +1,5 @@
-// what do events need?
-
-// similar to to-dos
-
-// name
-// date
-// description
-// completed
-// venue
-// attendees: number/users?
-// categories: 2 options: upcoming, proposed
-// if upcoming, cannot be edited [block edit if category  = upcoming i.e. status is confirmed]
-
 const mongoose = require('mongoose')
+const cloudinary = require('cloudinary')
 
 const eventSchema = new mongoose.Schema({
   name: {
@@ -44,9 +32,20 @@ const eventSchema = new mongoose.Schema({
     required: true
   },
   attachments: {
-    type: [String]
+    type: Array
   }
 })
+
+eventSchema.methods.imgUpload = function (allImages, callback) {
+  var thisEvent = this.toObject()
+  for (var i = 0; i < allImages.length; i++) {
+    cloudinary.uploader.upload(allImages[i].path).then(function (result) {
+      thisEvent.attachments.push(result.url)
+      // console.log(thisEvent.attachments)
+    })
+  }
+  return callback(null, thisEvent)
+}
 
 const Event = mongoose.model('Event', eventSchema)
 

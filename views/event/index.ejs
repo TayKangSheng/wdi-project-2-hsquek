@@ -1,11 +1,21 @@
-<h1>Events</h1>
+<h1>Events<span><a href="/events/new" class="btn btn-primary">Create</a></span></h1>
 
+
+<% let conEvents = [] %>
+<% let propEvents = [] %>
+
+<% foundEvents.forEach(function (event) { %>
+<%   if (event.status === 'confirmed') { %>
+<%     conEvents.push(event) %>
+<%   } else if (event.status === 'proposed') { %>
+<%     propEvents.push(event) %>
+<%   } %>
+<% }) %>
 
 <div class="row">
     <h2>Upcoming Events</h2>
-    <% foundEvents.forEach(function (event) { %>
+    <% conEvents.forEach(function (event) { %>
       <div class="col-md-4">
-      <% if (event.status === 'confirmed') { %>
         <%= event.name %>
         <pre>
           <%= event.description %>
@@ -17,7 +27,25 @@
               Delete
             </button>
           </form>
-        <% } %>
+        </div>
+      <% }) %>
+</div>
+
+<div class="row">
+    <h2>Proposed Events</h2>
+    <% propEvents.forEach(function (event) { %>
+      <div class="col-md-4">
+        <%= event.name %>
+        <pre>
+          <%= event.description %>
+        </pre>
+        <a href="/events/<%=event.id%>" class="btn btn-primary">View event</a>
+        <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit event</a>
+        <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
         </div>
       <% }) %>
 </div>

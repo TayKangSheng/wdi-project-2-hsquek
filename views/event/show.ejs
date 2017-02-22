@@ -1,3 +1,20 @@
-<h1>Photo Gallery</h1>
+<h1> <%= foundEvent.name %> </h1>
 
-<p>show id</p>
+<div class="row">
+      <div class="col-md-4">
+
+        <%= foundEvent.name %>
+        <pre>
+          <%= foundEvent.description %>
+        </pre>
+        <a href="/events/<%=foundEvent.id%>" class="btn btn-primary">View event</a>
+        <a href="/events/<%=foundEvent.id%>/update" class="btn btn-primary">Edit event</a>
+        <form method="POST" action="/events/<%= foundEvent.id%>?_method=DELETE">
+            <button class="btn btn-danger" type="submit">
+              Delete
+            </button>
+          </form>
+
+        </div>
+
+</div>

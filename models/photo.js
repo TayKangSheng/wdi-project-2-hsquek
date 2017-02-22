@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 // album name
 
 const photoSchema = new mongoose.Schema({
+  title: String,
   url: {
     type: String,
     required: true,
