@@ -86,14 +86,32 @@ let FamilyController = {
   },
 
   pushUser: function (req, res) {
-    Family.findByIdAndUpdate(req.params.id, {
-      $push: { members: req.body.email }
-    }, function (err, foundFamily, next) {
+    // Family.findByIdAndUpdate(req.params.id, {
+    //   $push: { members: req.body.email }
+    // }, function (err, foundFamily, next) {
+    //   if (err) {
+    //     console.error(err)
+    //     return next(err)
+    //   }
+    //   // console.log(foundFamily.members)
+    //   res.redirect('/family')
+    // })
+
+    Family.findById(req.params.id, function (err, foundFamily, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      // console.log(foundFamily.members)
+      let newUser = new User({
+        local: {
+          name: req.body.name,
+          email: req.body.email,
+          password: bcrypt.hashSync('password', 10)
+        }
+      })
+      foundFamily.members.push(newUser.local.email)
+      newUser.save()
+      foundFamily.save()
       res.redirect('/family')
     })
   },

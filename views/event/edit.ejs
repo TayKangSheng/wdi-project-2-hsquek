@@ -1,6 +1,23 @@
 <form method="post" action= "/events/<%=foundEvent._id%>?_method=PUT">
   <h2>Update event</h2>
 
+  <% var year = foundEvent.date.getFullYear().toString() %>
+  <% var month = (foundEvent.date.getMonth() + 1).toString() %>
+  <% var day = foundEvent.date.getDate().toString() %>
+  <% var date = "" %>
+
+  <% if (month.length < 2) { %>
+  <%  month = "0" + month %>
+  <% } %>
+
+  <% if (day.length < 2) { %>
+    <% day = "0" + day %>
+  <% } %>
+
+  <% var date = year + "-" + month + "-" + day %>
+
+  <h2><%= date %></h2>
+
   <div class="row">
     <div class="form-group col-md-12">
       <input type="text" class="form-control" name="events[name]" id="name" placeholder="Event title" value="<%= foundEvent.name %>">
@@ -9,7 +26,7 @@
       <input type="text" class="form-control" name="events[status]" id="status" placeholder="Event status" value="<%= foundEvent.status %>">
     </div>
     <div class="form-group col-md-4">
-      <input type="date" class="form-control" name="events[date]" id="date" value="<%= foundEvent.date.getFullYear() + "-" + (foundEvent.date.getMonth() + 1) + "-" + foundEvent.date.getDate() %>">
+      <input type="date" class="form-control" name="events[date]" id="date" value="<%= date %>">
     </div>
     <div class="form-group col-md-4">
       <input type="number" class="form-control" name="events[attendees]" id="attendees" placeholder="Number of attendees" value="<%= foundEvent.attendees %>">

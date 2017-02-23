@@ -1,10 +1,13 @@
 <h1>Family Account Management</h1>
 
-<h2>
-  <%= message %>
-</h2>
+<% if (message) { %>
+  <h2>
+    <%= message %>
+  </h2>
 
-<% if (family.id) { %>
+<% } %>
+
+<% if (family) { %>
 <h4><a href="/family/<%= family.id %>/pushuser">Update users</a></h4>
 <h4><a href="/family/<%= family.id %>/deleteuser">Delete user</a></h4>
 
