@@ -43,7 +43,7 @@ const FamilyRouter = require('./routes/family_routes')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-let port = 4001
+let port = process.env.PORT || 4001
 
 app.use(function (req, res, next) {
   res.locals.user = req.user
