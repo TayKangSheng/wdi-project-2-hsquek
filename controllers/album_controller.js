@@ -4,7 +4,7 @@ const cloudinary = require('cloudinary')
 
 const AlbumController = {
   listAll: function (req, res) {
-    Album.find({}, function (err, foundAlbums, next) {
+    Album.find({familyGroup: req.user.familyGroup}, function (err, foundAlbums, next) {
       if (err) {
         console.error(err)
         return next(err)
@@ -35,27 +35,28 @@ const AlbumController = {
     let newAlbum = new Album({
       name: req.body.albums.name,
       date: req.body.albums.date,
-      description: req.body.albums.description
+      description: req.body.albums.description,
+      familyGroup: req.user.familyGroup
     })
 
-    // req.files.forEach(function (file) {
-    //   cloudinary.uploader.upload(file.path, function (result) {
-    //     newAlbum.photos.push({
-    //       url: result.url
-    //     })
-    //     if (newAlbum.attachments.length === req.files.length) {
-    //       newAlbum.save(function (err, output) {
-    //         if (err) return err
-    //         // res.redirect('/events')
-    //         res.send('album created')
-    //       })
-    //     }
-    //   })
-    // })
-    newAlbum.save(function (err, output) {
-      if (err) return console.error(err)
-      res.redirect('/albums')
+    req.files.forEach(function (file) {
+      cloudinary.uploader.upload(file.path, function (result) {
+        newAlbum.photos.push({
+          url: result.url
+        })
+        if (newAlbum.photos.length === req.files.length) {
+          newAlbum.save(function (err, output) {
+            if (err) return err
+            res.redirect('/albums')
+            // res.send('album created')
+          })
+        }
+      })
     })
+    // newAlbum.save(function (err, output) {
+    //   if (err) return console.error(err)
+    //   res.redirect('/albums')
+    // })
   },
 
   editForm: function (req, res) {

@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(ejsLayouts)
 app.set('view engine', 'ejs')
 
-const UserRouter = require('./routes/user_routes')
+const AuthRouter = require('./routes/auth_routes')
 const EventRouter = require('./routes/event_routes')
 const AlbumRouter = require('./routes/album_routes')
 const FamilyRouter = require('./routes/family_routes')
@@ -49,13 +49,13 @@ app.use(function (req, res, next) {
   res.locals.user = req.user
   // console.log(res.locals);
   // console.log('---------------');
-  // console.log(req.user);
+  console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
 
   next()
 })
 
-app.use('/', UserRouter)
+app.use('/', AuthRouter)
 app.use('/family', FamilyRouter)
 app.use('/albums', AlbumRouter)
 app.use('/events', EventRouter)

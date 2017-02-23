@@ -1,9 +1,9 @@
 <form method="post" action= "/albums/<%=foundAlbum._id%>?_method=PUT">
   <h2>Update album</h2>
 
-  <% var year = foundEvent.date.getFullYear().toString() %>
-  <% var month = (foundEvent.date.getMonth() + 1).toString() %>
-  <% var day = foundEvent.date.getDate().toString() %>
+  <% var year = foundAlbum.date.getFullYear().toString() %>
+  <% var month = (foundAlbum.date.getMonth() + 1).toString() %>
+  <% var day = foundAlbum.date.getDate().toString() %>
   <% var date = "" %>
 
   <% if (month.length < 2) { %>

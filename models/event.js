@@ -33,7 +33,8 @@ const eventSchema = new mongoose.Schema({
   },
   attachments: {
     type: [Attachment.Schema]
-  }
+  },
+  familyGroup: mongoose.Schema.Types.ObjectId
 })
 
 // eventSchema.methods.imgUpload = function (allImages, callback) {

@@ -36,16 +36,25 @@ let FamilyController = {
   addFamily: function (req, res) {
     let newFamily = new Family({
       name: req.body.name,
-      owner: req.user.local.id,
+      owner: req.user.id,
       members: [req.user.local.email]
     })
-    newFamily.save(function (err, newFamily, next) {
+    console.log(newFamily);
+    User.findByIdAndUpdate(req.user.id, {
+      familyGroup: newFamily._id
+    }, function (err, updatedUser, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.redirect('/family')
-      // res.send('family created')
+      newFamily.save(function (err, newFamily, next) {
+        if (err) {
+          console.error(err)
+          return next(err)
+        }
+        res.redirect('/family')
+        // res.send('family created')
+      })
     })
   },
 

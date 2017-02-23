@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary')
 
 let EventController = {
   listAll: function (req, res) {
-    Event.find({}, function (err, foundEvents, next) {
+    Event.find({familyGroup: req.user.familyGroup}, function (err, foundEvents, next) {
       if (err) {
         console.error(err)
         return next(err)
@@ -40,7 +40,8 @@ let EventController = {
       status: req.body.events.status,
       attendees: req.body.events.attendees,
       venue: req.body.events.venue,
-      description: req.body.events.description
+      description: req.body.events.description,
+      familyGroup: req.user.familyGroup
     })
 
     if (req.files.length > 0) {

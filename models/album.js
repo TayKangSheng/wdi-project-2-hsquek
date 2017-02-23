@@ -10,7 +10,8 @@ var albumSchema = new mongoose.Schema({
   description: String,
   photos: {
     type: [Photo.Schema]
-  }
+  },
+  familyGroup: mongoose.Schema.Types.ObjectId
 })
 
 var Album = mongoose.model('Album', albumSchema)
