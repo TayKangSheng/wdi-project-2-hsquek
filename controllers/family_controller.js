@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
-const Family = require('../models/FamilyAccount')
+const Family = require('../models/familyAccount')
 const User = require('../models/user')
 
 let FamilyController = {
