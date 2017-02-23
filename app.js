@@ -47,6 +47,8 @@ let port = 4001
 
 app.use(function (req, res, next) {
   res.locals.user = req.user
+  // console.log(res.locals);
+  // console.log('---------------');
   // console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
 

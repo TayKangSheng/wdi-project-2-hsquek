@@ -15,35 +15,22 @@ let FamilyController = {
       for (var i = 0; i < families.length; i++) {
         if (families[i].members.includes(req.user.local.email)) {
           res.render('family/index', {
-            message: families[i].name + ' found'
+            family: families[i],
+            message: families[i].id + ' ' + families[i].name
           })
           return
-          // res.send('family found')
         }
       }
-
       res.render('family/index', {
-        message: 'cannot find family'
+        family: null,
+        message: 'family not found. create a family account'
       })
-      // res.send('no family found')
     })
-
-    // Family.findById(id, function (err, foundFamily, next) {
-    //   if (err) {
-    //     console.error(err)
-    //     return next(err)
-    //   }
-    //   // if user comes under familyacc, show the family
-    //   // res.render('family/index/' + foundFamily.id, {
-    //   //   family: foundFamily
-    //   // })
-    //   res.send('show my family here')
-    // })
   },
 
   newFamily: function (req, res) {
     // res.send('create form here')
-    res.render('family/createFamily')
+    res.render('family/createfamily')
   },
 
   addFamily: function (req, res) {
@@ -52,7 +39,7 @@ let FamilyController = {
       owner: req.user.local.id,
       members: [req.user.local.email]
     })
-    newFamily.save(function (err, newFamily) {
+    newFamily.save(function (err, newFamily, next) {
       if (err) {
         console.error(err)
         return next(err)
@@ -64,7 +51,7 @@ let FamilyController = {
 
   newUser: function (req, res) {
     // res.send('user create here')
-    res.render('family/newUser')
+    res.render('family/newuser')
   },
 
   createUser: function (req, res) {
@@ -75,42 +62,86 @@ let FamilyController = {
         password: bcrypt.hashSync('password', 10)
       }
     })
-    console.log(newUser);
+    // console.log(newUser);
     newUser.save(function (err, newUser) {
       if (err) {
         console.error(err)
         return
       }
-      res.send('new user created')
+      // res.send('new user created')
+      res.redirect('family')
+    })
+  },
+
+  pushUserForm: function (req, res) {
+    Family.findById(req.params.id, function (err, foundFamily, next) {
+      if (err) {
+        console.error(err)
+        return next(err)
+      }
+      res.render('family/pushuser', {
+        foundFamily: foundFamily
+      })
     })
   },
 
   pushUser: function (req, res) {
-    Family.findById(id, function (err, foundFamily, next) {
+    Family.findByIdAndUpdate(req.params.id, {
+      $push: { members: req.body.email }
+    }, function (err, foundFamily, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      if (!foundFamily.members.include(req.body.email)) {
-        foundFamily.members.push(req.body.email)
+      // console.log(foundFamily.members)
+      res.redirect('/family')
+    })
+  },
+
+  deleteUserForm: function (req, res) {
+    Family.findById(req.params.id, function (err, foundFamily, next) {
+      if (err) {
+        console.error(err)
+        return next(err)
       }
-      console.log(foundFamily.members)
-      res.send('user pushed')
+      res.render('family/removeuser', {
+        foundFamily: foundFamily
+      })
     })
   },
 
   deleteUser: function (req, res) {
-    Family.findById(id, function (err, foundFamily, next) {
+    if (req.user.local.email === req.body.email) {
+      req.flash('flash', {
+        type: 'warning',
+        message: 'cannot remove self'
+      })
+      res.render('home', {
+        flash: req.flash('flash')[0]
+      })
+    }
+
+    Family.findByIdAndUpdate(req.params.id, {
+      $pull: { members: req.body.email }
+    }, function (err, foundFamily, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      console.log(foundFamily.members.length)
-      foundFamily.members = foundFamily.members.splice(foundFamily.indexOf(req.body.email), 1)
-      console.log(foundFamily.members.length)
-      res.send('user deleted')
+      req.flash('flash', {
+        type: 'success',
+        message: 'user deleted'
+      })
+      res.render('home', {
+        flash: req.flash('flash')[0]
+      })
     })
+  },
+
+  changePasswordForm: function (req, response) {
+    // enable user to change password (do after mvp is done)
   }
+
 }
 
 module.exports = FamilyController
