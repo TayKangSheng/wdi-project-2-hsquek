@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const passport = require('passport')
 
+
 let UserController = {
   getHomePage: function (req, res) {
     res.render('home', {

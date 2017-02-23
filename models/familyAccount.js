@@ -6,8 +6,8 @@ const familyAccSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  owner: Schema.Types.ObjectId,
-  members: [User.Schema]
+  owner: mongoose.Schema.Types.ObjectId,
+  members: [String]
 })
 
 const FamilyAcc = mongoose.model('FamilyAcc', familyAccSchema)
