@@ -47,14 +47,14 @@ let port = 4001
 
 app.use(function (req, res, next) {
   res.locals.user = req.user
-  console.log(req.user);
+  // console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
 
   next()
 })
 
 app.use('/', UserRouter)
-// app.use('/family', FamilyRouter)
+app.use('/family', FamilyRouter)
 app.use('/albums', AlbumRouter)
 app.use('/events', EventRouter)
 

@@ -1,13 +1,11 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const Family = require('../models/FamilyAccount')
-const User = require('../models/FamilyAccount')
+const User = require('../models/user')
 
 let FamilyController = {
 
   listFamily: function (req, res) {
-    // if req.user.local.email
-
     Family.find({}, function (err, families, next) {
       if (err) {
         console.error(err)
@@ -16,11 +14,18 @@ let FamilyController = {
 
       for (var i = 0; i < families.length; i++) {
         if (families[i].members.includes(req.user.local.email)) {
-          res.send('family found')
+          res.render('family/index', {
+            message: families[i].name + ' found'
+          })
+          return
+          // res.send('family found')
         }
       }
 
-      res.send('cannot find family')
+      res.render('family/index', {
+        message: 'cannot find family'
+      })
+      // res.send('no family found')
     })
 
     // Family.findById(id, function (err, foundFamily, next) {
@@ -37,25 +42,29 @@ let FamilyController = {
   },
 
   newFamily: function (req, res) {
-    res.send('create form here')
+    // res.send('create form here')
+    res.render('family/createFamily')
   },
 
   addFamily: function (req, res) {
-    let newFamily = new FamilyAcc({
+    let newFamily = new Family({
       name: req.body.name,
-      owner: req.user.id
+      owner: req.user.local.id,
+      members: [req.user.local.email]
     })
     newFamily.save(function (err, newFamily) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.send('new family created')
+      res.redirect('/family')
+      // res.send('family created')
     })
   },
 
   newUser: function (req, res) {
-    res.send('user create here')
+    // res.send('user create here')
+    res.render('family/newUser')
   },
 
   createUser: function (req, res) {
@@ -63,15 +72,16 @@ let FamilyController = {
       local: {
         name: req.body.name,
         email: req.body.email,
-        password: 'password'
+        password: bcrypt.hashSync('password', 10)
       }
     })
+    console.log(newUser);
     newUser.save(function (err, newUser) {
       if (err) {
         console.error(err)
-        return next(err)
+        return
       }
-      next()
+      res.send('new user created')
     })
   },
 
