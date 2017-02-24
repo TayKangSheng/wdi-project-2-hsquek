@@ -34,8 +34,19 @@
     <div class="form-group col-md-8">
       <input type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event" value="<%= foundEvent.description %>">
     </div>
+
+    <% foundEvent.attachments.forEach(function (attachment) { %>
+
+      <div class="checkbox">
+        <label><input type="checkbox" value="<%= attachment.url %>" name="pullAttachments"><%= attachment.name %></label>
+      </div>
+
+    <% }) %>
+
+
+
     <div class="form-group col-md-4">
-      <input type="file" class="form-control" name="events[attachments]" id="attachments" placeholder="Link to your attachment" value="<% foundEvent.attachments %>">
+      <input type="file" class="form-control" name="events[attachments]" id="attachments" placeholder="Link to your attachment" value="<% foundEvent.attachments %>" multiple>
     </div>
     <div class="form-group col-md-4">
       <button type="submit" class="btn btn-default">Submit</button>

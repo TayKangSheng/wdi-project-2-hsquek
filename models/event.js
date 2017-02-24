@@ -25,7 +25,7 @@ const eventSchema = new mongoose.Schema({
   },
   attachments: {
     type: [Attachment.Schema],
-    maxlength: 3
+    maxlength: 2
   },
   familyGroup: mongoose.Schema.Types.ObjectId
 })

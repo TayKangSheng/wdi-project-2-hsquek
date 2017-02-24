@@ -43,13 +43,14 @@ let EventController = {
       description: req.body.events.description,
       familyGroup: req.user.familyGroup
     })
-
+    console.log(req.files)
     if (req.files) {
       if (req.files.length) {
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             newEvent.attachments.push({
-              url: result.url
+              url: result.url,
+              name: file.originalname
             })
             if (newEvent.attachments.length === req.files.length) {
               newEvent.save(function (err, output) {
@@ -79,7 +80,7 @@ let EventController = {
   },
 
   updateExisting: function (req, res, next) {
-    // console.log(req.body);
+    // console.log(req.body.pullAttachments[0])
     Event.findByIdAndUpdate(req.params.id,
       {
         name: req.body.events.name,
@@ -94,16 +95,34 @@ let EventController = {
         return next(err)
       }
       // console.log(foundEvent);
+      console.log('1')
+      console.log(foundEvent.attachments)
+      var toRemove = req.body.pullAttachments
+      var attachArr = foundEvent.attachments
+
+      if (toRemove) {
+        if (toRemove.length = 1) {
+          attachArr.splice(attachArr.indexOf(toRemove), 1)
+        } else {
+          toRemove.forEach(function (removeAtt) {
+            attachArr.splice(attachArr.indexOf(removeAtt),1)
+          })
+        }
+      }
+      console.log('2')
+      console.log(foundEvent.attachments)
+
       var originalLength = foundEvent.attachments.length
 
       console.log(originalLength)
-      if (req.files) {
+      if (req.files.length > 0) {
         console.log(req.files.length)
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             console.log('going into cloudinary')
             foundEvent.attachments.push({
-              url: result.url
+              url: result.url,
+              name: file.originalname
             })
             console.log(result.url)
             console.log(foundEvent.attachments.length)
