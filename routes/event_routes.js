@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: './uploads/' })
-const Event = require('../models/event')
+// const Event = require('../models/event')
 const EventController = require('../controllers/event_controller')
 
 router.get('/', EventController.listAll)
@@ -15,7 +15,7 @@ router.post('/', upload.array('events[attachments]', 2), EventController.createN
 
 router.get('/:id/update', EventController.editForm)
 
-router.put('/:id', EventController.updateExisting)
+router.put('/:id', upload.array('events[attachments]', 2), EventController.updateExisting)
 
 router.delete('/:id', EventController.deleteRecord)
 

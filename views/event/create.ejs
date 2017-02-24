@@ -4,7 +4,7 @@
   <h2>Add an event</h2>
 
   <div class="row">
-    <div class="form-group col-md-12">
+    <div class="form-group col-md-4">
       <input type="text" class="form-control" name="events[name]" id="name" placeholder="Event title" required>
     </div>
     <div class="form-group col-md-4">
@@ -14,14 +14,11 @@
       <input type="date" class="form-control" name="events[date]" id="date">
     </div>
     <div class="form-group col-md-4">
-      <input type="number" class="form-control" name="events[attendees]" id="attendees" placeholder="Number of attendees">
-    </div>
-    <div class="form-group col-md-12">
-      <input type="text" class="form-control" name="events[venue]" id="venue" placeholder="Event venue">
+      <textarea type="text" class="form-control" name="events[venue]" id="venue" placeholder="Event venue"></textarea>
 
     </div>
-    <div class="form-group col-md-12">
-      <input type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event">
+    <div class="form-group col-md-8">
+      <textarea type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event"></textarea>
 
     </div>
     <div class="form-group col-md-4">

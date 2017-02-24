@@ -44,20 +44,22 @@ let EventController = {
       familyGroup: req.user.familyGroup
     })
 
-    if (req.files.length) {
-      req.files.forEach(function (file) {
-        cloudinary.uploader.upload(file.path, function (result) {
-          newEvent.attachments.push({
-            url: result.url
-          })
-          if (newEvent.attachments.length === req.files.length) {
-            newEvent.save(function (err, output) {
-              if (err) return err
-              res.redirect('/events')
+    if (req.files) {
+      if (req.files.length) {
+        req.files.forEach(function (file) {
+          cloudinary.uploader.upload(file.path, function (result) {
+            newEvent.attachments.push({
+              url: result.url
             })
-          }
+            if (newEvent.attachments.length === req.files.length) {
+              newEvent.save(function (err, output) {
+                if (err) return err
+                res.redirect('/events')
+              })
+            }
+          })
         })
-      })
+      }
     } else {
       newEvent.save()
       res.redirect('/events')
@@ -78,21 +80,47 @@ let EventController = {
 
   updateExisting: function (req, res, next) {
     // console.log(req.body);
-    Event.findByIdAndUpdate(req.params.id, {
-      name: req.body.events.name,
-      date: req.body.events.date,
-      status: req.body.events.status,
-      attendees: req.body.events.attendees,
-      venue: req.body.events.venue,
-      description: req.body.events.description,
-      attachments: req.body.events.attachments
-    },
-    function (err, updatedEvent, next) {
+    Event.findByIdAndUpdate(req.params.id,
+      {
+        name: req.body.events.name,
+        date: req.body.events.date,
+        status: req.body.events.status,
+        venue: req.body.events.venue,
+        description: req.body.events.description
+      },
+    function (err, foundEvent, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.redirect('/events/' + updatedEvent.id)
+      // console.log(foundEvent);
+      var originalLength = foundEvent.attachments.length
+
+      console.log(originalLength)
+      if (req.files) {
+        console.log(req.files.length)
+        req.files.forEach(function (file) {
+          cloudinary.uploader.upload(file.path, function (result) {
+            console.log('going into cloudinary')
+            foundEvent.attachments.push({
+              url: result.url
+            })
+            console.log(result.url)
+            console.log(foundEvent.attachments.length)
+            if (foundEvent.attachments.length === originalLength + req.files.length) {
+              console.log(foundEvent.attachments.length, originalLength + req.files.length)
+              foundEvent.save(function (err, output) {
+                if (err) return err
+                res.redirect('/events/' + foundEvent.id)
+              })
+            }
+          })
+        })
+      } else {
+        console.log('event updated with no upload')
+        foundEvent.save()
+        res.redirect('/events/' + foundEvent.id)
+      }
     })
   },
 

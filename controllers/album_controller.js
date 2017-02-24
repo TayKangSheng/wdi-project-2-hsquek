@@ -126,8 +126,6 @@ const AlbumController = {
         console.error(err)
         return next(err)
       }
-      // console.log('req.files is...');
-      // console.log(req.files);
       var originalLength = updatedAlbum.photos.length
       // console.log(originalLength);
       if (req.files) {
@@ -138,8 +136,8 @@ const AlbumController = {
             updatedAlbum.photos.push({
               url: result.url
             })
-            console.log(result.url);
-            console.log(updatedAlbum.photos.length);
+            console.log(result.url)
+            console.log(updatedAlbum.photos.length)
             if (updatedAlbum.photos.length === originalLength + req.files.length) {
               // console.log(updatedAlbum.photos.length, originalLength + req.files.length);
               updatedAlbum.save(function (err, output) {

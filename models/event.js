@@ -11,20 +11,21 @@ const eventSchema = new mongoose.Schema({
     required: [ true, 'Date is required' ]
   },
   description: {
-    type: String,
+    type: String
   },
   completed: {
-    type: Boolean,
+    type: Boolean
   },
   venue: {
-    type: String,
+    type: String
   },
   status: {
     type: String,
-    enum: ['confirmed', 'proposed'],
+    enum: ['confirmed', 'proposed']
   },
   attachments: {
-    type: [Attachment.Schema]
+    type: [Attachment.Schema],
+    maxlength: 3
   },
   familyGroup: mongoose.Schema.Types.ObjectId
 })
