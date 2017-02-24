@@ -23,7 +23,7 @@ let UserController = {
   postSignUp: function (req, res, next) {
     var signUpStrategy = passport.authenticate('local-signup', {
       successRedirect: '/',
-      failureRedirect: '/',
+      failureRedirect: '/signup',
       failureFlash: true
     })
 

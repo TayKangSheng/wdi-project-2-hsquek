@@ -11,7 +11,7 @@ router.get('/new', EventController.makeNew)
 
 router.get('/:id', EventController.listOne)
 
-router.post('/', upload.array('events[attachments]'), EventController.createNew)
+router.post('/', upload.array('events[attachments]', 2), EventController.createNew)
 
 router.get('/:id/update', EventController.editForm)
 

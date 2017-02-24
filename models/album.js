@@ -4,11 +4,12 @@ const Photo = require('./photo')
 var albumSchema = new mongoose.Schema({
   name: {
     type: String,
-    default: 'Uncategorised',
     required: [true, 'Album name is required']
   },
   date: Date,
-  description: String,
+  description: {
+    type: String
+  },
   photos: {
     type: [Photo.Schema]
   },

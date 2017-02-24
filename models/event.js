@@ -12,23 +12,16 @@ const eventSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    default: ''
   },
   completed: {
     type: Boolean,
-    default: false
   },
   venue: {
     type: String,
-    default: 'To be confirmed'
-  },
-  attendees: {
-    type: Number
   },
   status: {
     type: String,
     enum: ['confirmed', 'proposed'],
-    default: 'proposed'
   },
   attachments: {
     type: [Attachment.Schema]

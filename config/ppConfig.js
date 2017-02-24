@@ -44,19 +44,6 @@ module.exports = function (passport) {
           }
         })
 
-        var validationErr = newUser.validateSync()
-        if (validationErr) {
-          console.log('validation error occured')
-          // req.flash('flash', {
-          //   type: 'danger',
-          //   message: 'User Validation error'
-          // })
-          return done(validationErr, null, req.flash('flash', {
-            type: 'danger',
-            message: 'user validation failed'
-          }))
-        }
-
         newUser.save(function (err, output) {
           return done(null, output, req.flash('flash', {
             type: 'success',

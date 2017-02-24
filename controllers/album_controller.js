@@ -39,29 +39,41 @@ const AlbumController = {
       familyGroup: req.user.familyGroup
     })
 
-    var validationErr = newAlbum.validateSync()
-    if (validationErr) {
-      console.log('validation error occured')
-      req.flash('flash', {
-        type: 'danger',
-        message: 'Validation error'
-      })
-      res.redirect('/')
+    var err = newAlbum.validateSync()
+    if (err) {
+      if (err.name === 'ValidationError') {
+        console.log(err)
+        var errMessages = []
+        for (var key in err.errors) {
+          errMessages.push(err.errors[key].message)
+        }
+        req.flash('flash', {
+          type: 'danger',
+          message: errMessages
+        })
+        res.redirect('/')
+      }
     }
 
-    req.files.forEach(function (file) {
-      cloudinary.uploader.upload(file.path, function (result) {
-        newAlbum.photos.push({
-          url: result.url
-        })
-        if (newAlbum.photos.length === req.files.length) {
-          newAlbum.save(function (err, output) {
-            if (err) return err
-            res.redirect('/albums')
+    if (req.files) {
+      req.files.forEach(function (file) {
+        cloudinary.uploader.upload(file.path, function (result) {
+          newAlbum.photos.push({
+            url: result.url
           })
-        }
+          if (newAlbum.photos.length === req.files.length) {
+            newAlbum.save(function (err, output) {
+              if (err) return err
+              res.redirect('/albums')
+            })
+          }
+        })
       })
-    })
+    } else {
+      console.log('album updated with no upload')
+      newAlbum.save()
+      res.redirect('/albums/')
+    }
 
   //   Album.create(req.body.params, function (err, output) {
   //     if (err) {
@@ -114,8 +126,34 @@ const AlbumController = {
         console.error(err)
         return next(err)
       }
-      console.log(updatedAlbum)
-      res.redirect('/albums/' + updatedAlbum.id)
+      // console.log('req.files is...');
+      // console.log(req.files);
+      var originalLength = updatedAlbum.photos.length
+      // console.log(originalLength);
+      if (req.files) {
+        // console.log(req.files.length);
+        req.files.forEach(function (file) {
+          cloudinary.uploader.upload(file.path, function (result) {
+            console.log('going into cloudinary')
+            updatedAlbum.photos.push({
+              url: result.url
+            })
+            console.log(result.url);
+            console.log(updatedAlbum.photos.length);
+            if (updatedAlbum.photos.length === originalLength + req.files.length) {
+              // console.log(updatedAlbum.photos.length, originalLength + req.files.length);
+              updatedAlbum.save(function (err, output) {
+                if (err) return err
+                res.redirect('/albums/' + updatedAlbum.id)
+              })
+            }
+          })
+        })
+      } else {
+        console.log('album updated with no upload')
+        updatedAlbum.save()
+        res.redirect('/albums/' + updatedAlbum.id)
+      }
     })
   },
 
