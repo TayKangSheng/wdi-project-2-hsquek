@@ -1,6 +1,7 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/user')
+const helpers = require('../middleware/helpers')
 
 module.exports = function (passport) {
   passport.serializeUser(function (user, done) {
@@ -30,7 +31,7 @@ module.exports = function (passport) {
       }
 
       if (found) {
-        done(null, false, req.flash('flash', {
+        return done(null, false, req.flash('flash', {
           type: 'warning',
           message: 'user already exists'
         }))
@@ -42,11 +43,21 @@ module.exports = function (passport) {
             password: User.encrypt(password)
           }
         })
+
+        var validationErr = newUser.validateSync()
+        if (validationErr) {
+          console.log('validation error occured')
+          // req.flash('flash', {
+          //   type: 'danger',
+          //   message: 'User Validation error'
+          // })
+          return done(validationErr, null, req.flash('flash', {
+            type: 'danger',
+            message: 'user validation failed'
+          }))
+        }
+
         newUser.save(function (err, output) {
-          if (err) {
-            console.error(err)
-            return done(err)
-          }
           return done(null, output, req.flash('flash', {
             type: 'success',
             message: 'user created successfully'
@@ -65,6 +76,13 @@ module.exports = function (passport) {
       if (err) {
         console.error(err)
         return done(err)
+      }
+
+      if (!found) {
+        return done(null, false, req.flash('flash', {
+          type: 'warning',
+          message: 'no such user'
+        }))
       }
 
       if (found.validPassword(password)) {

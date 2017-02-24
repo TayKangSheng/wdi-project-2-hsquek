@@ -4,7 +4,7 @@ const Attachment = require('../models/attachment')
 const cloudinary = require('cloudinary')
 
 let EventController = {
-  listAll: function (req, res) {
+  listAll: function (req, res, next) {
     Event.find({familyGroup: req.user.familyGroup}, function (err, foundEvents, next) {
       if (err) {
         console.error(err)
@@ -16,7 +16,7 @@ let EventController = {
     })
   },
 
-  listOne: function (req, res) {
+  listOne: function (req, res, next) {
     Event.findById(req.params.id, function (err, foundEvent, next) {
       if (err) {
         console.error(err)
@@ -29,11 +29,11 @@ let EventController = {
     })
   },
 
-  makeNew: function (req, res) {
+  makeNew: function (req, res, next) {
     res.render('event/create')
   },
 
-  createNew: function (req, res) {
+  createNew: function (req, res, next) {
     let newEvent = new Event({
       name: req.body.events.name,
       date: req.body.events.date,
@@ -44,21 +44,17 @@ let EventController = {
       familyGroup: req.user.familyGroup
     })
 
-    if (req.files.length > 0) {
-
+    if (req.files.length) {
       req.files.forEach(function (file) {
         cloudinary.uploader.upload(file.path, function (result) {
           newEvent.attachments.push({
             url: result.url
           })
-          // console.log(newEvent.attachments)
-          // console.log(newEvent)
           if (newEvent.attachments.length === req.files.length) {
             newEvent.save(function (err, output) {
-              if (err) return err;
+              if (err) return err
               res.redirect('/events')
             })
-
           }
         })
       })
@@ -68,7 +64,7 @@ let EventController = {
     }
   },
 
-  editForm: function (req, res) {
+  editForm: function (req, res, next) {
     Event.findById(req.params.id, function (err, foundEvent, next) {
       if (err) {
         console.error(err)
@@ -80,19 +76,17 @@ let EventController = {
     })
   },
 
-  updateExisting: function (req, res) {
-    Event.findByIdAndUpdate(req.params.id,
-      {
-        $set: {
-          name: req.body.events.name,
-          date: req.body.events.date,
-          status: req.body.events.status,
-          attendees: req.body.events.attendees,
-          venue: req.body.events.venue,
-          description: req.body.events.description,
-          attachments: req.body.events.attachments
-        }
-      },
+  updateExisting: function (req, res, next) {
+    // console.log(req.body);
+    Event.findByIdAndUpdate(req.params.id, {
+      name: req.body.events.name,
+      date: req.body.events.date,
+      status: req.body.events.status,
+      attendees: req.body.events.attendees,
+      venue: req.body.events.venue,
+      description: req.body.events.description,
+      attachments: req.body.events.attachments
+    },
     function (err, updatedEvent, next) {
       if (err) {
         console.error(err)
@@ -102,7 +96,7 @@ let EventController = {
     })
   },
 
-  deleteRecord: function (req, res) {
+  deleteRecord: function (req, res, next) {
     Event.findByIdAndRemove(req.params.id, function (err, output, next) {
       if (err) {
         console.error(err)

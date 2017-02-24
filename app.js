@@ -40,6 +40,7 @@ const AuthRouter = require('./routes/auth_routes')
 const EventRouter = require('./routes/event_routes')
 const AlbumRouter = require('./routes/album_routes')
 const FamilyRouter = require('./routes/family_routes')
+const helpers = require('./middleware/helpers')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -49,16 +50,24 @@ app.use(function (req, res, next) {
   res.locals.user = req.user
   // console.log(res.locals);
   // console.log('---------------');
-  console.log(req.user);
+  // console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
 
   next()
 })
 
 app.use('/', AuthRouter)
-app.use('/family', FamilyRouter)
-app.use('/albums', AlbumRouter)
-app.use('/events', EventRouter)
+app.use('/family', helpers.needLogin, FamilyRouter)
+app.use('/albums', helpers.needLogin, helpers.needFamilyTag, AlbumRouter)
+app.use('/events', helpers.needLogin, helpers.needFamilyTag, EventRouter)
+
+// app.use(function (err, req, res, next) {
+//   if (!res.headersSent) {
+//     res.send({
+//       message: err.message
+//     })
+//   }
+// })
 
 app.listen(port, function () {
   console.log('App is running on port: ' + port)

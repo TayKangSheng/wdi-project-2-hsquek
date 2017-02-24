@@ -3,7 +3,7 @@ const Photo = require('../models/photo')
 const cloudinary = require('cloudinary')
 
 const AlbumController = {
-  listAll: function (req, res) {
+  listAll: function (req, res, next) {
     Album.find({familyGroup: req.user.familyGroup}, function (err, foundAlbums, next) {
       if (err) {
         console.error(err)
@@ -15,7 +15,7 @@ const AlbumController = {
     })
   },
 
-  listOne: function (req, res) {
+  listOne: function (req, res, next) {
     Album.findById(req.params.id, function (err, foundAlbum, next) {
       if (err) {
         console.error(err)
@@ -27,17 +27,27 @@ const AlbumController = {
     })
   },
 
-  makeNew: function (req, res) {
+  makeNew: function (req, res, next) {
     res.render('album/create')
   },
 
-  createNew: function (req, res) {
+  createNew: function (req, res, next) {
     let newAlbum = new Album({
       name: req.body.albums.name,
       date: req.body.albums.date,
       description: req.body.albums.description,
       familyGroup: req.user.familyGroup
     })
+
+    var validationErr = newAlbum.validateSync()
+    if (validationErr) {
+      console.log('validation error occured')
+      req.flash('flash', {
+        type: 'danger',
+        message: 'Validation error'
+      })
+      res.redirect('/')
+    }
 
     req.files.forEach(function (file) {
       cloudinary.uploader.upload(file.path, function (result) {
@@ -48,18 +58,38 @@ const AlbumController = {
           newAlbum.save(function (err, output) {
             if (err) return err
             res.redirect('/albums')
-            // res.send('album created')
           })
         }
       })
     })
-    // newAlbum.save(function (err, output) {
-    //   if (err) return console.error(err)
-    //   res.redirect('/albums')
-    // })
+
+  //   Album.create(req.body.params, function (err, output) {
+  //     if (err) {
+  //       console.log(err)
+  //       if (err.name === 'ValidationError') {
+  //         let errMessages = []
+  //         for (var field in err.errors) {
+  //           errMessages.push(err.errors[field].message)
+  //         }
+  //
+  //         req.flash('flash', {
+  //           type: 'danger',
+  //           message: errMessages
+  //         })
+  //         res.redirect('/')
+  //       }
+  //
+  //       return next(err)
+  //     }
+  //     req.flash('flash', {
+  //       type: 'success',
+  //       message: 'Created an animal with name: ' + output.name
+  //     })
+  //     res.redirect('/')
+  //   })
   },
 
-  editForm: function (req, res) {
+  editForm: function (req, res, next) {
     Album.findById(req.params.id, function (err, foundAlbum, next) {
       if (err) {
         console.error(err)
@@ -71,15 +101,13 @@ const AlbumController = {
     })
   },
 
-  updateExisting: function (req, res) {
-    console.log(req.body);
+  updateExisting: function (req, res, next) {
+    // console.log(req.body);
     Album.findByIdAndUpdate(req.params.id,
       {
-        $set: {
-          name: req.body.albums.name,
-          date: req.body.albums.date,
-          description: req.body.albums.description
-        }
+        name: req.body.albums.name,
+        date: req.body.albums.date,
+        description: req.body.albums.description
       },
     function (err, updatedAlbum, next) {
       if (err) {
@@ -91,7 +119,7 @@ const AlbumController = {
     })
   },
 
-  deleteRecord: function (req, res) {
+  deleteRecord: function (req, res, next) {
     Album.findByIdAndRemove(req.params.id, function (err, output, next) {
       if (err) {
         console.error(err)

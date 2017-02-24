@@ -3,7 +3,6 @@ const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: './uploads/' })
 const Event = require('../models/event')
-
 const EventController = require('../controllers/event_controller')
 
 router.get('/', EventController.listAll)

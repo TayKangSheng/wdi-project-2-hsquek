@@ -4,11 +4,11 @@ const Attachment = require('./attachment')
 const eventSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: [ true, 'Event name is required' ]
   },
   date: {
     type: Date,
-    required: true
+    required: [ true, 'Date is required' ]
   },
   description: {
     type: String,
@@ -28,25 +28,13 @@ const eventSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['confirmed', 'proposed'],
-    default: 'proposed',
-    required: true
+    default: 'proposed'
   },
   attachments: {
     type: [Attachment.Schema]
   },
   familyGroup: mongoose.Schema.Types.ObjectId
 })
-
-// eventSchema.methods.imgUpload = function (allImages, callback) {
-//   var thisEvent = this.toObject()
-//   for (var i = 0; i < allImages.length; i++) {
-//     cloudinary.uploader.upload(allImages[i].path,function (result) {
-//       thisEvent.attachments.push(result.url.toString())
-//       // console.log(thisEvent.attachments)
-//     })
-//   }
-//   return callback(null, thisEvent)
-// }
 
 const Event = mongoose.model('Event', eventSchema)
 
