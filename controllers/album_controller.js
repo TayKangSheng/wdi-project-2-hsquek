@@ -71,7 +71,6 @@ const AlbumController = {
         })
       })
     } else {
-      console.log('album updated with no upload')
       newAlbum.save()
       res.redirect('/albums/')
     }
@@ -115,7 +114,6 @@ const AlbumController = {
   },
 
   updateExisting: function (req, res, next) {
-    // console.log(req.body);
     Album.findByIdAndUpdate(req.params.id,
       {
         name: req.body.albums.name,
@@ -129,40 +127,71 @@ const AlbumController = {
       }
 
       console.log('1')
-      console.log(foundAlbum.attachments)
+      console.log(foundAlbum.photos)
+
       var toRemove = req.body.pullPhotos
       var thisArr = foundAlbum.photos
 
       if (toRemove) {
         if (!Array.isArray(toRemove)) {
-          thisArr.splice(thisArr.indexOf(toRemove), 1)
+          let idx = (function () {
+            for (var i = 0; i < thisArr.length; i++) {
+              if (thisArr[i].url === toRemove) {
+                return i
+              }
+            }
+          })()
+          thisArr.splice(idx, 1)
         } else {
-          toRemove.forEach(function (removeOne) {
-            thisArr.splice(thisArr.indexOf(removeOne), 1)
-          })
+          var spliceIdxArr = []
+          for (var j = 0; j < toRemove.length; j++) {
+            for (var n = 0; n < thisArr.length; n++) {
+              if (thisArr[n].url === toRemove[j]) {
+                if (!spliceIdxArr.includes(n)) {
+                  spliceIdxArr.push(n)
+                }
+              }
+            }
+          }
+          console.log('pre spliced arr is ', thisArr)
+          spliceIdxArr.sort()
+          for (var x = spliceIdxArr.length - 1; x >= 0; x--) {
+            thisArr.splice(spliceIdxArr[x], 1)
+          }
+          console.log('arr after splice is ', thisArr)
         }
       }
 
-      console.log('2')
-      console.log(foundAlbum.photos)
+      // if (toRemove) {
+      //   if (!Array.isArray(toRemove)) {
+      //     thisArr.splice(thisArr.indexOf(toRemove), 1)
+      //   } else {
+      //     toRemove.forEach(function (removeOne) {
+      //       thisArr.splice(thisArr.indexOf(removeOne), 1)
+      //     })
+      //   }
+      // }
+
+      // console.log('2')
+      // console.log(foundAlbum.photos)
 
       var originalLength = foundAlbum.photos.length
 
-      console.log(originalLength);
+      // console.log(originalLength);
 
       if (req.files.length > 0) {
-        console.log(req.files.length);
+        // console.log(req.files.length);
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
-            console.log('going into cloudinary')
+            // console.log('going into cloudinary')
             foundAlbum.photos.push({
               url: result.url,
               name: file.originalname
             })
-            console.log(result.url)
-            console.log(foundAlbum.photos.length)
+            // console.log(result.url)
+            // console.log(foundAlbum.photos.length)
             if (foundAlbum.photos.length === originalLength + req.files.length) {
-              console.log(foundAlbum.photos.length, originalLength + req.files.length);
+              // console.log(foundAlbum.photos.length, originalLength + req.files.length);
               foundAlbum.save(function (err, output) {
                 if (err) return err
                 res.redirect('/albums/' + foundAlbum.id)
@@ -171,7 +200,7 @@ const AlbumController = {
           })
         })
       } else {
-        console.log('album updated with no upload')
+        // console.log('album updated with no upload')
         foundAlbum.save()
         res.redirect('/albums/' + foundAlbum.id)
       }

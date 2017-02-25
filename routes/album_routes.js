@@ -12,11 +12,11 @@ router.get('/new', AlbumController.makeNew)
 
 router.get('/:id', AlbumController.listOne)
 
-router.post('/', upload.array('albums[photos]', 5), AlbumController.createNew)
+router.post('/', upload.array('albums[photos]', 10), AlbumController.createNew)
 
 router.get('/:id/update', AlbumController.editForm)
 
-router.put('/:id', upload.array('albums[photos]', 5), AlbumController.updateExisting)
+router.put('/:id', upload.array('albums[photos]', 10), AlbumController.updateExisting)
 
 router.delete('/:id', AlbumController.deleteRecord)
 

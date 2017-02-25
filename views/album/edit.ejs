@@ -19,6 +19,45 @@
   <h2><%= date %></h2>
 
   <div class="row">
+
+    <div class="col-md-4">
+      <div class="row">
+        <% for (var i = 0 ; i < 3; i++) { %>
+          <div width="200px" height="100px" style="border: solid black 2px">
+            <p>print</p>
+
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="row">
+        <% for (var i = 0 ; i < 3; i++) { %>
+          <div width="200px" height="100px" style="border: solid black 2px">
+            <p>print</p>
+
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="row">
+        <% for (var i = 0 ; i < 3; i++) { %>
+          <div width="200px" height="100px" style="border: solid black 2px">
+            <p>print</p>
+
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+
+
+
+
+
     <div class="form-group col-md-6">
       <input type="text" class="form-control" name="albums[name]" id="name" placeholder="Album title" value="<%= foundAlbum.name %>">
     </div>
@@ -28,6 +67,23 @@
     <div class="form-group col-md-12">
       <input type="text" class="form-control" name="albums[description]" id="description" placeholder="Describe your album" value="<%= foundAlbum.description %>">
     </div>
+
+    <% foundAlbum.photos.forEach(function (photo) { %>
+
+
+
+
+          <div class="col-md-12" style="border: solid black 2px; background: url('<%=photo.url%>'); background-size: cover">
+
+                <input type="checkbox" value="<%= photo.url %>" name="pullPhotos">
+
+          </div>
+        </div>
+
+
+
+    <% }) %>
+
     <div class="form-group col-md-4">
       <input type="file" class="form-control" name="albums[photos]" id="photos" placeholder="Put your photos" value="<% foundAlbum.photos %>" multiple>
     </div>

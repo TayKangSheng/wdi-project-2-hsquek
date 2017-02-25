@@ -1,4 +1,3 @@
-// const mongoose = require('mongoose')
 const Event = require('../models/event')
 const Attachment = require('../models/attachment')
 const cloudinary = require('cloudinary')
@@ -80,7 +79,6 @@ let EventController = {
   },
 
   updateExisting: function (req, res, next) {
-    // console.log(req.body.pullAttachments[0])
     Event.findByIdAndUpdate(req.params.id,
       {
         name: req.body.events.name,
@@ -94,17 +92,12 @@ let EventController = {
         console.error(err)
         return next(err)
       }
-      // console.log(foundEvent);
-      // console.log('1')
-      // console.log(req.body.pullAttachments)
-      // console.log(foundEvent.attachments)
+
       var toRemove = req.body.pullAttachments
       var thisArr = foundEvent.attachments
 
       if (toRemove) {
         if (!Array.isArray(toRemove)) {
-          // console.log('index of');
-          // console.log(thisArr.indexOf({url: toRemove}));
           let idx = (function () {
             for (var i = 0; i < thisArr.length; i++) {
               if (thisArr[i].url === toRemove) {
@@ -112,7 +105,7 @@ let EventController = {
               }
             }
           })()
-          // console.log('index is ' + idx);
+
           thisArr.splice(idx, 1)
         } else {
           var spliceIdxArr = []
@@ -125,23 +118,19 @@ let EventController = {
               }
             }
           }
-          console.log('pre spliced arr is ', thisArr);
+          console.log('pre spliced arr is ', thisArr)
           spliceIdxArr.sort()
           for (var x = spliceIdxArr.length - 1; x >= 0; x--) {
             thisArr.splice(spliceIdxArr[x], 1)
           }
-          console.log('arr after splice is ', thisArr);
+          console.log('arr after splice is ', thisArr)
         }
       }
 
-      // console.log('2')
-      // console.log(foundEvent.attachments)
-
       var originalLength = foundEvent.attachments.length
 
-      // console.log(originalLength)
       if (req.files.length > 0) {
-        // console.log(req.files.length)
+
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             console.log('going into cloudinary')
@@ -149,8 +138,7 @@ let EventController = {
               url: result.url,
               name: file.originalname
             })
-            // console.log(result.url)
-            // console.log(foundEvent.attachments.length)
+
             if (foundEvent.attachments.length === originalLength + req.files.length) {
               console.log(foundEvent.attachments.length, originalLength + req.files.length)
               foundEvent.save(function (err, output) {
@@ -161,7 +149,6 @@ let EventController = {
           })
         })
       } else {
-        // console.log('event updated with no upload')
         foundEvent.save()
         res.redirect('/events/' + foundEvent.id)
       }
