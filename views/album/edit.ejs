@@ -72,15 +72,13 @@
 
 
 
+        <div class="col-md-4">
+          <div class="row" style="border: solid black 2px; background: url('<%=photo.url%>'); background-size: cover">
 
-          <div class="col-md-12" style="border: solid black 2px; background: url('<%=photo.url%>'); background-size: cover">
-
-                <input type="checkbox" value="<%= photo.url %>" name="pullPhotos">
+                <label><input type="checkbox" value="<%= photo.url %>" name="pullPhotos"><%= photo.name %></label>
 
           </div>
         </div>
-
-
 
     <% }) %>
 
