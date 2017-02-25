@@ -1,28 +1,42 @@
 <h1> <%= foundAlbum.name %> </h1>
 
-<div class="row">
-      <div class="col-md-4">
+<p><%= foundAlbum.description %></p>
 
-        <%= foundAlbum.name %>
-        <pre>
-          <%= foundAlbum.description %>
-        </pre>
-        <a href="/albums/<%=foundAlbum.id%>/update" class="btn btn-primary">Edit album</a>
-        <form method="POST" action="/albums/<%= foundAlbum.id%>?_method=DELETE">
-            <button class="btn btn-danger" type="submit">
-              Delete
-            </button>
-          </form>
-
-        <% foundAlbum.photos.forEach(function (photo) { %>
-          <div width="20%" height= "20%">
-            <img src="<%= photo.url %>" width="200px" height="auto" alt="image not available"></img>
-        </div>
-
-        <% }) %>
-
-
-
-        </div>
-
+<div style="display: flex">
+<a href="/albums/<%=foundAlbum.id%>/update" class="btn btn-primary">Edit album</a>
+<form method="POST" action="/albums/<%= foundAlbum.id%>?_method=DELETE">
+    <button class="btn btn-danger" type="submit">
+      Delete
+    </button>
+  </form>
 </div>
+
+
+<section id="section-works" class="section appear clearfix">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-md-12">
+						<div class="row">
+							<div class="portfolio-items isotopeWrapper clearfix isotope" id="3" style="position: relative; overflow: hidden; height: 861px;">
+
+
+                <% for (var i = 0; i < foundAlbum.photos.length; i++) { %>
+                  <article class="col-md-4 isotopeItem webdesign isotope-item" style="position: absolute; left: 0px; top: 0px; transform: translate3d(<%= (i%3 * 390) %>px, <%= Math.floor(i/3)*287 %>px, 0px) scale3d(1, 1, 1); opacity: 1;">
+  									<div class="portfolio-item">
+  										<div class="wow rotateInUpLeft animated" data-animation-delay="4.8s" style="visibility: visible; position: absolute;">
+  											<img src="<%= foundAlbum.photos[i].url %>" alt="welcome" style="width: 350px; height: auto; position: relative; top:50%; transform:translateY(30%)">
+  										</div>
+
+  									</div>
+  								</article>
+                <% } %>
+
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
