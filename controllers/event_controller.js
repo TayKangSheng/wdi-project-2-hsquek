@@ -95,28 +95,53 @@ let EventController = {
         return next(err)
       }
       // console.log(foundEvent);
-      console.log('1')
-      console.log(foundEvent.attachments)
+      // console.log('1')
+      // console.log(req.body.pullAttachments)
+      // console.log(foundEvent.attachments)
       var toRemove = req.body.pullAttachments
-      var attachArr = foundEvent.attachments
+      var thisArr = foundEvent.attachments
 
       if (toRemove) {
-        if (toRemove.length = 1) {
-          attachArr.splice(attachArr.indexOf(toRemove), 1)
+        if (!Array.isArray(toRemove)) {
+          // console.log('index of');
+          // console.log(thisArr.indexOf({url: toRemove}));
+          let idx = (function () {
+            for (var i = 0; i < thisArr.length; i++) {
+              if (thisArr[i].url === toRemove) {
+                return i
+              }
+            }
+          })()
+          // console.log('index is ' + idx);
+          thisArr.splice(idx, 1)
         } else {
-          toRemove.forEach(function (removeAtt) {
-            attachArr.splice(attachArr.indexOf(removeAtt),1)
-          })
+          var spliceIdxArr = []
+          for (var j = 0; j < toRemove.length; j++) {
+            for (var n = 0; n < thisArr.length; n++) {
+              if (thisArr[n].url === toRemove[j]) {
+                if (!spliceIdxArr.includes(n)) {
+                  spliceIdxArr.push(n)
+                }
+              }
+            }
+          }
+          console.log('pre spliced arr is ', thisArr);
+          spliceIdxArr.sort()
+          for (var x = spliceIdxArr.length - 1; x >= 0; x--) {
+            thisArr.splice(spliceIdxArr[x], 1)
+          }
+          console.log('arr after splice is ', thisArr);
         }
       }
-      console.log('2')
-      console.log(foundEvent.attachments)
+
+      // console.log('2')
+      // console.log(foundEvent.attachments)
 
       var originalLength = foundEvent.attachments.length
 
-      console.log(originalLength)
+      // console.log(originalLength)
       if (req.files.length > 0) {
-        console.log(req.files.length)
+        // console.log(req.files.length)
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             console.log('going into cloudinary')
@@ -124,8 +149,8 @@ let EventController = {
               url: result.url,
               name: file.originalname
             })
-            console.log(result.url)
-            console.log(foundEvent.attachments.length)
+            // console.log(result.url)
+            // console.log(foundEvent.attachments.length)
             if (foundEvent.attachments.length === originalLength + req.files.length) {
               console.log(foundEvent.attachments.length, originalLength + req.files.length)
               foundEvent.save(function (err, output) {
@@ -136,7 +161,7 @@ let EventController = {
           })
         })
       } else {
-        console.log('event updated with no upload')
+        // console.log('event updated with no upload')
         foundEvent.save()
         res.redirect('/events/' + foundEvent.id)
       }

@@ -14,6 +14,15 @@
             </button>
           </form>
 
+        <% foundAlbum.photos.forEach(function (photo) { %>
+          <div width="20%" height= "20%">
+            <img src="<%= photo.url %>" width="200px" height="auto" alt="image not available"></img>
+        </div>
+
+        <% }) %>
+
+
+
         </div>
 
 </div>

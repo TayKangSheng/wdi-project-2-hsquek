@@ -11,11 +11,11 @@ router.get('/new', EventController.makeNew)
 
 router.get('/:id', EventController.listOne)
 
-router.post('/', upload.array('events[attachments]', 2), EventController.createNew)
+router.post('/', upload.array('events[attachments]', 5), EventController.createNew)
 
 router.get('/:id/update', EventController.editForm)
 
-router.put('/:id', upload.array('events[attachments]', 2), EventController.updateExisting)
+router.put('/:id', upload.array('events[attachments]', 5), EventController.updateExisting)
 
 router.delete('/:id', EventController.deleteRecord)
 

@@ -59,7 +59,8 @@ const AlbumController = {
       req.files.forEach(function (file) {
         cloudinary.uploader.upload(file.path, function (result) {
           newAlbum.photos.push({
-            url: result.url
+            url: result.url,
+            name: file.originalname
           })
           if (newAlbum.photos.length === req.files.length) {
             newAlbum.save(function (err, output) {
@@ -121,36 +122,58 @@ const AlbumController = {
         date: req.body.albums.date,
         description: req.body.albums.description
       },
-    function (err, updatedAlbum, next) {
+    function (err, foundAlbum, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      var originalLength = updatedAlbum.photos.length
-      // console.log(originalLength);
-      if (req.files) {
-        // console.log(req.files.length);
+
+      console.log('1')
+      console.log(foundAlbum.attachments)
+      var toRemove = req.body.pullPhotos
+      var thisArr = foundAlbum.photos
+
+      if (toRemove) {
+        if (!Array.isArray(toRemove)) {
+          thisArr.splice(thisArr.indexOf(toRemove), 1)
+        } else {
+          toRemove.forEach(function (removeOne) {
+            thisArr.splice(thisArr.indexOf(removeOne), 1)
+          })
+        }
+      }
+
+      console.log('2')
+      console.log(foundAlbum.photos)
+
+      var originalLength = foundAlbum.photos.length
+
+      console.log(originalLength);
+
+      if (req.files.length > 0) {
+        console.log(req.files.length);
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             console.log('going into cloudinary')
-            updatedAlbum.photos.push({
-              url: result.url
+            foundAlbum.photos.push({
+              url: result.url,
+              name: file.originalname
             })
             console.log(result.url)
-            console.log(updatedAlbum.photos.length)
-            if (updatedAlbum.photos.length === originalLength + req.files.length) {
-              // console.log(updatedAlbum.photos.length, originalLength + req.files.length);
-              updatedAlbum.save(function (err, output) {
+            console.log(foundAlbum.photos.length)
+            if (foundAlbum.photos.length === originalLength + req.files.length) {
+              console.log(foundAlbum.photos.length, originalLength + req.files.length);
+              foundAlbum.save(function (err, output) {
                 if (err) return err
-                res.redirect('/albums/' + updatedAlbum.id)
+                res.redirect('/albums/' + foundAlbum.id)
               })
             }
           })
         })
       } else {
         console.log('album updated with no upload')
-        updatedAlbum.save()
-        res.redirect('/albums/' + updatedAlbum.id)
+        foundAlbum.save()
+        res.redirect('/albums/' + foundAlbum.id)
       }
     })
   },
@@ -165,6 +188,10 @@ const AlbumController = {
       res.redirect('/albums')
     })
   }
+
+  // addPhoto: function (req, res, next) {
+  //
+  // }
 }
 
 module.exports = AlbumController
