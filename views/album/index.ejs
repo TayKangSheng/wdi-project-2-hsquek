@@ -1,49 +1,48 @@
+<h1>Photo Gallery<span><a href="/albums/new" class="btn btn-primary" style="float: right">Create</a></span></h1>
 
-<h1>Photo Gallery<span><a href="/albums/new" class="btn btn-primary">Create</a></span></h1>
 
 
-<% if (foundAlbums.length >= 1) { %>
-<div class="row">
-    <h2>Most recent</h2>
-      <div class="col-md-4">
-        <%= foundAlbums[0].name %>
-        <pre>
-          <%= foundAlbums[0].description %>
-        </pre>
-        <a href="/albums/<%=foundAlbums[0].id%>" class="btn btn-primary">View album</a>
-        <a href="/albums/<%=foundAlbums[0].id%>/update" class="btn btn-primary">Edit album</a>
-        <form method="POST" action="/albums/<%= foundAlbums[0].id%>?_method=DELETE">
-            <button class="btn btn-danger" type="submit">
-              Delete album
-            </button>
-          </form>
+<div class="events">
+
+    <%if (foundAlbums.length > 0) {%>
+      <%foundAlbums.forEach(function (album) {%>
+
+        <div class="container">
+          <div class="col-md-4">
+            <div class="slider" style="height: 320px; background: white">
+              <div class="img-responsive">
+
+                  <div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative; height: 300px">
+                    <ul class="bxslider" style="width: 100%; position: relative;">
+
+                    <%for (var i = 0; i < album.photos.length; i++) {%>
+
+                      <li style="float: none; list-style: none; position: relative; width: 350px; z-index: 50; display: block">
+                        <img src="<%= album.photos[i].url %>" alt="" style="max-width: 100%; height: auto; margin: 0 auto">
+                      </li>
+
+                    <%}%>
+
+                    </ul>
+                </div>
+
+            </div>
+          </div>
         </div>
-</div>
-<% } %>
-
-
-<% if (foundAlbums.length > 1) { %>
-
-<%  var otherAlbums = foundAlbums.slice(1) %>
-
-
-
-<div class="row">
-    <h2>Other albums</h2>
-    <% otherAlbums.forEach(function (album) { %>
-      <div class="col-md-4">
-        <%= album.name %>
-        <pre>
-          <%= album.description %>
-        </pre>
-        <a href="/albums/<%=album.id%>" class="btn btn-primary">View album</a>
-        <a href="/albums/<%=album.id%>/update" class="btn btn-primary">Edit album</a>
-        <form method="POST" action="/albums/<%= album.id%>?_method=DELETE">
+          <div class="col-md-8">
+            <h2><%=album.name%></h2>
+            <%=album.date.getDate() + "." + album.date.getMonth() + "." + album.date.getFullYear()%>
+            <p>
+              <%= album.description %>
+            </p>
+            <a href="/albums/<%=album.id%>" class="btn btn-primary">View album</a>
+            <a href="/albums/<%=album.id%>/update" class="btn btn-primary">Edit album</a>
+            <form method="POST" action="/albums/<%= album.id%>?_method=DELETE">
             <button class="btn btn-danger" type="submit">
-              Delete
+            Delete
             </button>
-          </form>
+            </form>
+          </div>
         </div>
-      <% }) %>
-</div>
-<% } %>
+      <%})%>
+    <%}%>

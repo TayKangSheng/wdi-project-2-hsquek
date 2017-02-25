@@ -35,13 +35,16 @@
       <input type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event" value="<%= foundEvent.description %>">
     </div>
 
+    <div class='row'>
     <% foundEvent.attachments.forEach(function (attachment) { %>
-
-      <div class="checkbox">
-        <label><input type="checkbox" value="<%= attachment.url %>" name="pullAttachments"><%= attachment.name %></label>
+      <div class="form-group col-md-2">
+        <div class="checkbox">
+          <label><input type="checkbox" value="<%= attachment.url %>" name="pullAttachments"><%= attachment.name %></label>
+       </div>
       </div>
 
     <% }) %>
+    </div>
 
 
 

@@ -14,6 +14,9 @@ const app = express()
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGODB_URI)
 
+app.use(ejsLayouts)
+// app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
 app.use(cookieParser(process.env.SESSION_SECRET))
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -33,7 +36,6 @@ app.use(flash())
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(ejsLayouts)
 app.set('view engine', 'ejs')
 
 const AuthRouter = require('./routes/auth_routes')
@@ -52,6 +54,7 @@ app.use(function (req, res, next) {
   // console.log('---------------');
   // console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
+  // console.log(res.locals);
 
   next()
 })
