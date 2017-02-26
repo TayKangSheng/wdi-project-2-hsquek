@@ -109,21 +109,34 @@ let FamilyController = {
       }
 
       if (req.body.email) {
-        foundFamily.members.push(req.body.email)
-        let newUser = new User({
-          local: {
-            email: req.body.email,
-            password: User.encrypt('password', 10)
-          },
-          familyGroup: req.user.familyGroup
+        User.findOne({ 'local.email': req.body.email }, function (err, userFound) {
+          if (err) {
+            console.error(err)
+            return next(err)
+          }
+
+          if (!userFound) {
+            console.log('no user found')
+            foundFamily.members.push(req.body.email)
+            let newUser = new User({
+              local: {
+                email: req.body.email,
+                password: User.encrypt('password', 10)
+              },
+              familyGroup: req.user.familyGroup
+            })
+
+            newUser.save()
+            foundFamily.save()
+            res.redirect('/family')
+          } else {
+            console.log('user found')
+            foundFamily.members.push(req.body.email)
+            foundFamily.save()
+            res.redirect('/family')
+          }
         })
-
-        newUser.save()
       }
-
-      // console.log(foundFamily.members);
-      foundFamily.save()
-      res.redirect('/family')
     })
   },
 
