@@ -1,5 +1,4 @@
 const Event = require('../models/event')
-const Attachment = require('../models/attachment')
 const cloudinary = require('cloudinary')
 
 let EventController = {
@@ -20,7 +19,6 @@ let EventController = {
       if (err) {
         console.error(err)
         return next(err)
-        // res.send('err but listOne')
       }
       res.render('event/show', {
         foundEvent: foundEvent
@@ -33,7 +31,6 @@ let EventController = {
   },
 
   createNew: function (req, res, next) {
-    // console.log(req.body);
     let newEvent = new Event({
       name: req.body.events.name,
       date: req.body.events.date,
@@ -65,7 +62,6 @@ let EventController = {
     console.log(req.files)
     if (req.files.length > 0) {
       req.files.forEach(function (file) {
-
         cloudinary.uploader.upload(file.path, function (result) {
           newEvent.attachments.push({
             url: result.url,
@@ -80,7 +76,6 @@ let EventController = {
         })
       })
     } else {
-
       newEvent.save()
       res.redirect('/events')
     }
@@ -139,12 +134,10 @@ let EventController = {
               }
             }
           }
-          console.log('pre spliced arr is ', thisArr)
           spliceIdxArr.sort()
           for (var x = spliceIdxArr.length - 1; x >= 0; x--) {
             thisArr.splice(spliceIdxArr[x], 1)
           }
-          console.log('arr after splice is ', thisArr)
         }
       }
 
@@ -153,14 +146,12 @@ let EventController = {
       if (req.files.length > 0) {
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
-            console.log('going into cloudinary')
             foundEvent.attachments.push({
               url: result.url,
               name: file.originalname
             })
 
             if (foundEvent.attachments.length === originalLength + req.files.length) {
-              console.log(foundEvent.attachments.length, originalLength + req.files.length)
               foundEvent.save(function (err, output) {
                 if (err) return err
                 res.redirect('/events/' + foundEvent.id)

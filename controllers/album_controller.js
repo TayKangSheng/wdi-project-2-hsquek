@@ -1,5 +1,4 @@
 const Album = require('../models/album')
-const Photo = require('../models/photo')
 const cloudinary = require('cloudinary')
 
 const AlbumController = {
@@ -73,34 +72,7 @@ const AlbumController = {
     } else {
       newAlbum.save()
       res.redirect('/albums/')
-
     }
-
-
-  //   Album.create(req.body.params, function (err, output) {
-  //     if (err) {
-  //       console.log(err)
-  //       if (err.name === 'ValidationError') {
-  //         let errMessages = []
-  //         for (var field in err.errors) {
-  //           errMessages.push(err.errors[field].message)
-  //         }
-  //
-  //         req.flash('flash', {
-  //           type: 'danger',
-  //           message: errMessages
-  //         })
-  //         res.redirect('/')
-  //       }
-  //
-  //       return next(err)
-  //     }
-  //     req.flash('flash', {
-  //       type: 'success',
-  //       message: 'Created an animal with name: ' + output.name
-  //     })
-  //     res.redirect('/')
-  //   })
   },
 
   editForm: function (req, res, next) {
