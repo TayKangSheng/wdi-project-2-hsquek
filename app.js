@@ -48,15 +48,12 @@ const helpers = require('./middleware/helpers')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-let port = process.env.PORT || 4001
+let port = process.env.PORT || 4000
+
 
 app.use(function (req, res, next) {
   res.locals.user = req.user
-  // console.log(res.locals);
-  // console.log('---------------');
-  // console.log(req.user);
   res.locals.isAuthenticated = req.isAuthenticated()
-  // console.log(res.locals);
 
   next()
 })
