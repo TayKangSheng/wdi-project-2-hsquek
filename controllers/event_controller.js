@@ -64,7 +64,7 @@ let EventController = {
       req.files.forEach(function (file) {
         cloudinary.uploader.upload(file.path, function (result) {
           newEvent.attachments.push({
-            url: result.url,
+            url: result.secure_url,
             name: file.originalname
           })
           if (newEvent.attachments.length === req.files.length) {
@@ -147,7 +147,7 @@ let EventController = {
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             foundEvent.attachments.push({
-              url: result.url,
+              url: result.secure_url,
               name: file.originalname
             })
 

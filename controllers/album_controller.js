@@ -58,7 +58,7 @@ const AlbumController = {
       req.files.forEach(function (file) {
         cloudinary.uploader.upload(file.path, function (result) {
           newAlbum.photos.push({
-            url: result.url,
+            url: result.secure_url,
             name: file.originalname
           })
           if (newAlbum.photos.length === req.files.length) {
@@ -146,7 +146,7 @@ const AlbumController = {
           cloudinary.uploader.upload(file.path, function (result) {
             // console.log('going into cloudinary')
             foundAlbum.photos.push({
-              url: result.url,
+              url: result.secure_url,
               name: file.originalname
             })
             // console.log(result.url)
