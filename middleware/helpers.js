@@ -29,22 +29,21 @@ const helpers = {
         flash: req.flash('flash')[0]
       })
     }
+  },
 
+  needFamilyTag: function (req, res, next) {
+    if (req.user.familyGroup) {
+      next()
+    } else {
+      req.flash('flash', {
+        type: 'warning',
+        message: 'please create/join a family group first'
+      })
+      res.render('home', {
+        flash: req.flash('flash')[0]
+      })
+    }
   }
-
-  // needFamilyTag: function (req, res, next) {
-  //   if (req.user.familyGroup) {
-  //     next()
-  //   } else {
-  //     req.flash('flash', {
-  //       type: 'warning',
-  //       message: 'please create/join a family group first'
-  //     })
-  //     res.render('home', {
-  //       flash: req.flash('flash')[0]
-  //     })
-  //   }
-  // }
 }
 
 module.exports = helpers
