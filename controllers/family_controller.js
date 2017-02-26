@@ -107,7 +107,7 @@ let FamilyController = {
         local: {
           name: req.body.name,
           email: req.body.email,
-          password: bcrypt.hashSync('password', 10)
+          password: User.encrypt('password')
         },
         familyGroup: req.user.familyGroup
       }
@@ -135,7 +135,7 @@ let FamilyController = {
         foundFamily.save()
         req.flash('flash', {
           type: 'success',
-          message: 'Created an animal with name: ' + output.name
+          message: 'Created user with email: ' + output.email
         })
         res.redirect('/')
       })
