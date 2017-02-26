@@ -20,8 +20,8 @@ const eventSchema = new mongoose.Schema({
     type: String
   },
   status: {
-    type: String,
-    enum: ['confirmed', 'proposed']
+    type: String
+    // enum: ['confirmed', 'proposed']
   },
   attachments: {
     type: [Attachment.Schema],

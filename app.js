@@ -9,12 +9,14 @@ const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const MongoStore = require('connect-mongo')(session)
 const flash = require('connect-flash')
+const logger = require('morgan')
 const app = express()
 
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGODB_URI)
 
 app.use(ejsLayouts)
+// app.use(logger('dev'))
 // app.use(express.static('public'))
 app.use(express.static(__dirname + '/public'))
 app.use(cookieParser(process.env.SESSION_SECRET))

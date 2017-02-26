@@ -36,13 +36,13 @@
               <%= album.description %>
             </p>
             <div style="display: flex">
-            <a href="/albums/<%=album.id%>" class="btn btn-primary">View</a>
-            <a href="/albums/<%=album.id%>/update" class="btn btn-primary">Edit</a>
-            <form method="POST" action="/albums/<%= album.id%>?_method=DELETE">
-            <button class="btn btn-danger" type="submit">
-            Delete
-            </button>
-            </form>
+              <a href="/albums/<%=album.id%>" class="btn btn-primary">View</a>
+              <a href="/albums/<%=album.id%>/update" class="btn btn-primary">Edit</a>
+              <form method="POST" action="/albums/<%= album.id%>?_method=DELETE">
+              <button class="btn btn-danger" type="submit">
+                Delete
+                </button>
+              </form>
             </div>
           </div>
         </div>

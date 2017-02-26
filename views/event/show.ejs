@@ -1,18 +1,34 @@
-<h1> <%= foundEvent.name %> </h1>
+<h1> <%= foundEvent.name %> (<%= foundEvent.status %>) </h1>
 
-<div class="row">
-      <div class="col-md-4">
+<div class="row events">
+      <div class="col-md-12">
+        <div class="col-md-12">
 
-        <%= foundEvent.name %>
-        <pre>
-          <%= foundEvent.description %>
-        </pre>
-        <a href="/events/<%=foundEvent.id%>/update" class="btn btn-primary">Edit event</a>
-        <form method="POST" action="/events/<%= foundEvent.id%>?_method=DELETE">
+          <h4><%=foundEvent.date.getDate() + "." + foundEvent.date.getMonth() + "." + foundEvent.date.getFullYear()%></h4>
+          <p>
+            <h5> <%= foundEvent.venue %> </h5>
+            <p>
+              <%= foundEvent.description %>
+            </p>
+          </p>
+
+        <div class="row events" >
+          <% foundEvent.attachments.forEach(function (attachment) { %>
+            <div class="form group col-md-2" style="display:flex; font-size: 12px;">
+
+                <a style="color: navy" href="<%= attachment.url %>"><%= attachment.name %></a>
+
+              </div>
+        <% }) %>
+        </div>
+        <div style="display:flex; margin-top: 20px">
+          <a href="/events/<%=foundEvent.id%>/update" class="btn btn-primary">Edit</a>
+          <form method="POST" action="/events/<%= foundEvent.id%>?_method=DELETE">
             <button class="btn btn-danger" type="submit">
-              Delete
+                Delete
             </button>
           </form>
+        </div>
 
         </div>
 

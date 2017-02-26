@@ -1,51 +1,78 @@
-<h1>Events<span><a href="/events/new" class="btn btn-primary">Create</a></span></h1>
+<h1>Events<span><a href="/events/new" class="btn btn-primary" style="float:right">Create</a></span></h1>
 
 
 <% let conEvents = [] %>
 <% let propEvents = [] %>
 
 <% foundEvents.forEach(function (event) { %>
-<%   if (event.status === 'confirmed') { %>
-<%     conEvents.push(event) %>
-<%   } else if (event.status === 'proposed') { %>
-<%     propEvents.push(event) %>
-<%   } %>
+
+  <% if (!event.completed) { %>
+    <%   if (event.status === 'confirmed') { %>
+      <%     conEvents.push(event) %>
+      <%   } else if (event.status === 'proposed') { %>
+        <%     propEvents.push(event) %>
+        <%   } %>
+
+  <% } %>
 <% }) %>
 
-<div class="row">
-    <h2>Upcoming Events</h2>
+<% if (conEvents.length > 0) { %>
+  <div class="events row col-md-12">
+    <h4>Upcoming Events</h4>
     <% conEvents.forEach(function (event) { %>
-      <div class="col-md-4">
-        <%= event.name %>
-        <pre>
-          <%= event.description %>
-        </pre>
-        <a href="/events/<%=event.id%>" class="btn btn-primary">View event</a>
-        <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit event</a>
-        <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
-            <button class="btn btn-danger" type="submit">
-              Delete
-            </button>
-          </form>
-        </div>
-      <% }) %>
-</div>
 
-<div class="row">
-    <h2>Proposed Events</h2>
-    <% propEvents.forEach(function (event) { %>
       <div class="col-md-4">
-        <%= event.name %>
-        <pre>
-          <%= event.description %>
-        </pre>
-        <a href="/events/<%=event.id%>" class="btn btn-primary">View event</a>
-        <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit event</a>
-        <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
-            <button class="btn btn-danger" type="submit">
-              Delete
-            </button>
-          </form>
-        </div>
+      <h5><%=event.name%></h5>
+      <%=event.date.getDate() + "." + event.date.getMonth() + "." + event.date.getFullYear()%>
+      <p>
+      <%= event.description %>
+      </p>
+
+
+
+      <div style="display: flex; margin-top: 20px">
+      <a href="/events/<%=event.id%>" class="btn btn-primary">View</a>
+      <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit</a>
+      <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
+      <button class="btn btn-danger" type="submit">
+      Delete
+      </button>
+      </form>
+      </div>
+      </div>
+
       <% }) %>
-</div>
+
+
+
+    </div>
+
+<% } %>
+
+<% if (propEvents.length > 0) { %>
+  <div class="events row col-md-12">
+    <h5>Proposed Events</h5>
+    <% propEvents.forEach(function (event) { %>
+
+
+      <div class="col-md-4">
+      <h6><%=event.name%></h6>
+      <%=event.date.getDate() + "." + event.date.getMonth() + "." + event.date.getFullYear()%>
+      <p>
+      <%= event.description %>
+      </p>
+      <div style="display: flex">
+      <a href="/events/<%=event.id%>" class="btn btn-primary">View</a>
+      <a href="/events/<%=event.id%>/update" class="btn btn-primary">Edit</a>
+      <form method="POST" action="/events/<%= event.id%>?_method=DELETE">
+      <button class="btn btn-danger" type="submit">
+      Delete
+      </button>
+      </form>
+      </div>
+      </div>
+
+      <% }) %>
+    </div>
+
+<% } %>

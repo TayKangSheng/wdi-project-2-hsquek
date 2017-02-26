@@ -33,34 +33,54 @@ let EventController = {
   },
 
   createNew: function (req, res, next) {
+    // console.log(req.body);
     let newEvent = new Event({
       name: req.body.events.name,
       date: req.body.events.date,
       status: req.body.events.status,
-      attendees: req.body.events.attendees,
+      completed: false,
       venue: req.body.events.venue,
       description: req.body.events.description,
       familyGroup: req.user.familyGroup
     })
-    console.log(req.files)
-    if (req.files) {
-      if (req.files.length) {
-        req.files.forEach(function (file) {
-          cloudinary.uploader.upload(file.path, function (result) {
-            newEvent.attachments.push({
-              url: result.url,
-              name: file.originalname
-            })
-            if (newEvent.attachments.length === req.files.length) {
-              newEvent.save(function (err, output) {
-                if (err) return err
-                res.redirect('/events')
-              })
-            }
-          })
+
+    // console.log(newEvent);
+
+    var err = newEvent.validateSync()
+    if (err) {
+      if (err.name === 'ValidationError') {
+        console.log(err)
+        var errMessages = []
+        for (var key in err.errors) {
+          errMessages.push(err.errors[key].message)
+        }
+        req.flash('flash', {
+          type: 'danger',
+          message: errMessages
         })
+        res.redirect('/')
       }
+    }
+
+    console.log(req.files)
+    if (req.files.length > 0) {
+      req.files.forEach(function (file) {
+
+        cloudinary.uploader.upload(file.path, function (result) {
+          newEvent.attachments.push({
+            url: result.url,
+            name: file.originalname
+          })
+          if (newEvent.attachments.length === req.files.length) {
+            newEvent.save(function (err, output) {
+              if (err) return err
+              res.redirect('/events')
+            })
+          }
+        })
+      })
     } else {
+
       newEvent.save()
       res.redirect('/events')
     }
@@ -85,7 +105,8 @@ let EventController = {
         date: req.body.events.date,
         status: req.body.events.status,
         venue: req.body.events.venue,
-        description: req.body.events.description
+        description: req.body.events.description,
+        completed: req.body.events.completed
       },
     function (err, foundEvent, next) {
       if (err) {
@@ -130,7 +151,6 @@ let EventController = {
       var originalLength = foundEvent.attachments.length
 
       if (req.files.length > 0) {
-
         req.files.forEach(function (file) {
           cloudinary.uploader.upload(file.path, function (result) {
             console.log('going into cloudinary')

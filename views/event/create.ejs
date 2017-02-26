@@ -4,28 +4,64 @@
   <h2>Add an event</h2>
 
   <div class="row">
+
     <div class="form-group col-md-4">
       <input type="text" class="form-control" name="events[name]" id="name" placeholder="Event title" required>
     </div>
+
     <div class="form-group col-md-4">
-      <input type="text" class="form-control" name="events[status]" id="status" placeholder="Event status">
+      <input type="date" class="form-control" name="events[date]" id="date" required>
     </div>
+
     <div class="form-group col-md-4">
-      <input type="date" class="form-control" name="events[date]" id="date">
+      <select class="form-control" name="events[status]" id="status" placeholder="Event status">
+
+          <option value="confirmed">confirmed event</option>
+          <option value="proposed" selected>proposed event</option>
+
+      </select>
     </div>
+
     <div class="form-group col-md-4">
       <textarea type="text" class="form-control" name="events[venue]" id="venue" placeholder="Event venue"></textarea>
-
     </div>
+
     <div class="form-group col-md-8">
       <textarea type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event"></textarea>
-
     </div>
+
     <div class="form-group col-md-4">
       <input type="file" class="form-control" name="events[attachments]" id="attachments" multiple>
     </div>
+
     <div class="form-group col-md-4">
-      <button type="submit" class="btn btn-default">Submit</button>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+
+  </div>
+
+</form>
+
+<%# <h1>Create an album</h1>%>
+
+<%# <form method="post" action="/albums" enctype="multipart/form-data">
+
+  <div class="row">
+    <div class="form-group col-md-6">
+      <input type="text" class="form-control" name="albums[name]" id="name" placeholder="Album title">
+    </div>
+    <div class="form-group col-md-6">
+      <input type="date" class="form-control" name="albums[date]" id="date">
+    </div>
+    <div class="form-group col-md-12">
+      <textarea type="text" class="form-control" name="albums[description]" id="description" placeholder="Describe your album"></textarea>
+    </div>
+
+    <div class="form-group col-md-4">
+      <input type="file" class="form-control" name="albums[photos]" id="photos" multiple>
+    </div>
+    <div class="form-group col-md-4">
+      <button type="submit" class="btn btn-primary">Create</button>
     </div>
   </div>
-</form>
+</form>%>

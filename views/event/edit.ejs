@@ -1,5 +1,5 @@
 <form method="post" action="/events/<%=foundEvent._id%>?_method=PUT" enctype="multipart/form-data">
-  <h2>Update event</h2>
+
 
   <% var year = foundEvent.date.getFullYear().toString() %>
   <% var month = (foundEvent.date.getMonth() + 1).toString() %>
@@ -16,26 +16,45 @@
 
   <% var date = year + "-" + month + "-" + day %>
 
-  <h2><%= date %></h2>
+  <div style="display: flex">
+  <h3> Update <%= foundEvent.name %> (<%= date %>)</h3>
+</div>
 
   <div class="row">
     <div class="form-group col-md-4">
       <input type="text" class="form-control" name="events[name]" id="name" placeholder="Event title" value="<%= foundEvent.name %>">
     </div>
-    <div class="form-group col-md-4">
-      <input type="text" class="form-control" name="events[status]" id="status" placeholder="Event status" value="<%= foundEvent.status %>">
+    <div class="form-group col-md-2">
+      <select class="form-control" name="events[status]" id="status" placeholder="Event status">
+        <% if (foundEvent.status === 'confirmed') { %>
+          <option value="confirmed" selected>confirmed event</option>
+          <option value="proposed">proposed event</option>
+        <% } else { %>
+          <option value="confirmed">confirmed event</option>
+          <option value="proposed" selected>proposed event</option>
+        <% } %>
+      </select>
     </div>
+
+    <div class="form-group col-md-2">
+      <select class="form-control" name="events[completed]" id="completed" placeholder="Event completed?">
+          <option value="false" selected>event not completed</option>
+          <option value="true">event completed</option>
+
+      </select>
+    </div>
+
     <div class="form-group col-md-4">
       <input type="date" class="form-control" name="events[date]" id="date" value="<%= date %>">
     </div>
     <div class="form-group col-md-4">
-      <input type="text" class="form-control" name="events[venue]" id="venue" placeholder="Event venue" value="<%= foundEvent.venue %>">
+      <textarea rows="4" type="text" class="form-control" name="events[venue]" id="venue" placeholder="Event venue"><%=foundEvent.venue %></textarea>
     </div>
     <div class="form-group col-md-8">
-      <input type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event" value="<%= foundEvent.description %>">
+      <textarea rows="4" type="text" class="form-control" name="events[description]" id="description" placeholder="Describe your event"><%= foundEvent.description %></textarea>
     </div>
 
-    <div class='row'>
+    <div class="events row">
     <% foundEvent.attachments.forEach(function (attachment) { %>
       <div class="form-group col-md-2">
         <div class="checkbox">

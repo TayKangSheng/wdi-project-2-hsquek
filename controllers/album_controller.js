@@ -55,7 +55,7 @@ const AlbumController = {
       }
     }
 
-    if (req.files) {
+    if (req.files.length > 0) {
       req.files.forEach(function (file) {
         cloudinary.uploader.upload(file.path, function (result) {
           newAlbum.photos.push({
@@ -73,7 +73,9 @@ const AlbumController = {
     } else {
       newAlbum.save()
       res.redirect('/albums/')
+
     }
+
 
   //   Album.create(req.body.params, function (err, output) {
   //     if (err) {
