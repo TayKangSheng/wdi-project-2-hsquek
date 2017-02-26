@@ -30,7 +30,7 @@ let FamilyController = {
   },
 
   newFamily: function (req, res, next) {
-    res.render('family/createfamily')
+    res.render('family/create')
   },
 
   addFamily: function (req, res, next) {
