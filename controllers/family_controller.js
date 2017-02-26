@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const Family = require('../models/familyAccount')
 const User = require('../models/user')
+const helpers = require('../middleware/helpers')
 
 let FamilyController = {
 
