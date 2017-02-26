@@ -1,24 +1,31 @@
-<h1>Family Account Management</h1><a href="/family/create" class="btn btn-primary" style="float: right">Create</a>
 
 
+<h1>Family Account Management<span><a href="/family/create" class="btn btn-primary" style="float: right">Create</a></span></h1>
+
+
+<div class="events row">
 
 <% if (message) { %>
-  <h2>
+  <h3>
     <%= message %>
-  </h2>
+  </h3>
 
 <% } %>
 
 <% if (family) { %>
-<a class="btn btn-primary" href="/family/<%= family.id %>/update">Update family</a>
+  <div style="display: flex">
+<a class="btn btn-primary" href="/family/<%= family.id %>/update">Update members</a>
 <form method="POST" action="/family/<%= family.id%>?_method=DELETE">
 <button class="btn btn-danger" type="submit">
   Delete family
   </button>
 </form>
+</div>
 
 <% } else { %>
 
 <h4><a href="/family/create">Create family account</a></h4>
 
 <% } %>
+
+</div>

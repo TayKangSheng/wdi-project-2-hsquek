@@ -90,9 +90,25 @@ let FamilyController = {
           })()
 
           thisArr.splice(idx, 1)
+
+          User.findOneAndRemove({ 'local.email' : toRemove }, function (err, output) {
+            if (err) {
+              console.error(err);
+              return next(err)
+            }
+            console.log('user deleted');
+          })
+
         } else {
           var spliceIdxArr = []
           for (var j = 0; j < toRemove.length; j++) {
+            User.findOneAndRemove({ 'local.email' : toRemove[j] }, function (err, output) {
+              if (err) {
+                console.error(err);
+                return next(err)
+              }
+              console.log('user deleted');
+            })
             for (var n = 0; n < thisArr.length; n++) {
               if (thisArr[n] === toRemove[j]) {
                 if (!spliceIdxArr.includes(n)) {
