@@ -108,7 +108,7 @@ let FamilyController = {
         }
       }
 
-      if (req.body.email) {
+      if (req.body.email.length) {
         User.findOne({ 'local.email': req.body.email }, function (err, userFound) {
           if (err) {
             console.error(err)
@@ -136,6 +136,9 @@ let FamilyController = {
             res.redirect('/family')
           }
         })
+      } else {
+        foundFamily.save()
+        res.redirect('/family')
       }
     })
   },
