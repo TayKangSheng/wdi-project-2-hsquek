@@ -33,7 +33,7 @@
                 <% for (var i = 0; i < foundAlbum.photos.length; i++) { %>
                   <article class="col-md-4 isotopeItem webdesign isotope-item bx-pager-item bx-pager-link active" style="position: absolute; left: 0px; top: 0px; transform: translate3d(<%= (i%3 * 390) %>px, <%= Math.floor(i/3)*287 %>px, 0px) scale3d(1, 1, 1); opacity: 1;">
   									<div class="portfolio-item">
-  										<div data-animation-delay="4.8s" style="visibility: visible; position: absolute;">
+  										<div class="wow rotateInUpLeft animated" data-animation-delay="4.8s" style="visibility: visible; position: absolute;">
   											<img src="<%= foundAlbum.photos[i].url %>" alt="welcome" style="width: 350px; height: 262.5px; position: relative; top:50%;">
   										</div>
 
