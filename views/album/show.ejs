@@ -22,19 +22,19 @@
 
 
 <section id="section-works" class="section appear clearfix">
-			<div class="container">
+			<div class="container" style="margin-top: 50px">
 				<div class="row">
 
 					<div class="col-md-12">
 						<div class="row">
-							<div class="portfolio-items isotopeWrapper clearfix isotope" id="3" style="position: relative; overflow: hidden; height: 861px;">
+							<div class="portfolio-items isotopeWrapper clearfix isotope" id="3" style="position: relative; overflow: hidden; height: <%= Math.ceil(foundAlbum.photos.length/3) * 287 %>px;">
 
 
                 <% for (var i = 0; i < foundAlbum.photos.length; i++) { %>
                   <article class="col-md-4 isotopeItem webdesign isotope-item bx-pager-item bx-pager-link active" style="position: absolute; left: 0px; top: 0px; transform: translate3d(<%= (i%3 * 390) %>px, <%= Math.floor(i/3)*287 %>px, 0px) scale3d(1, 1, 1); opacity: 1;">
   									<div class="portfolio-item">
   										<div class="wow rotateInUpLeft animated" data-animation-delay="4.8s" style="visibility: visible; position: absolute;">
-  											<img src="<%= foundAlbum.photos[i].url %>" alt="welcome" style="width: 350px; height: 262.5px; position: relative; top:50%; transform:translateY(30%)">
+  											<img src="<%= foundAlbum.photos[i].url %>" alt="welcome" style="width: 350px; height: 262.5px; position: relative; top:50%;">
   										</div>
 
   									</div>
