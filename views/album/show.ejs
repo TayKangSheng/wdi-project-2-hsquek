@@ -3,7 +3,7 @@
 <p><%= foundAlbum.description %></p>
 
 <div style="display: flex">
-<a href="/albums/<%=foundAlbum.id%>/update" class="btn btn-primary">Edit album</a>
+<a href="/albums/<%=foundAlbum.id%>/update" class="btn btn-primary">Edit</a>
 <form method="POST" action="/albums/<%= foundAlbum.id%>?_method=DELETE">
     <button class="btn btn-danger" type="submit">
       Delete
