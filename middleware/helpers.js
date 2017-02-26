@@ -57,11 +57,12 @@ const helpers = {
           type: 'danger',
           message: errMessages
         })
-    // res.render('home', {
-    //   flash: req.flash('flash')[0]
-    // })
+        res.render('home', {
+          flash: req.flash('flash')[0]
+        })
+
     // change to redirect once all pages have flash on them
-        res.send('validation error')
+        // res.send('validation error')
       }
       // return next(err)
     }

@@ -8,16 +8,10 @@ Router.get('/create', FamilyController.newFamily)
 
 Router.post('/create', FamilyController.addFamily)
 
-Router.get('/newuser', FamilyController.newUser)
+Router.get('/:id/update', FamilyController.updateForm)
 
-Router.post('/newuser', FamilyController.createUser)
+Router.put('/:id', FamilyController.updateFamily)
 
-Router.get('/:id/pushuser', FamilyController.pushUserForm)
-
-Router.put('/:id', FamilyController.pushUser)
-
-Router.get('/:id/deleteuser', FamilyController.deleteUserForm)
-
-Router.delete('/:id', FamilyController.deleteUser)
+Router.delete('/:id', FamilyController.deleteFamily)
 
 module.exports = Router

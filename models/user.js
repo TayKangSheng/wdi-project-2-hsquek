@@ -4,9 +4,9 @@ const bcrypt = require('bcrypt')
 const userSchema = new mongoose.Schema({
   local: {
     name: {
-      type: String,
-      minlength: [ 5, 'Name should be between 5 and 20 characters'],
-      maxlength: [ 20, 'Name should be between 5 and 20 characters']
+      type: String
+      // minlength: [ 5, 'Name should be between 5 and 20 characters'],
+      // maxlength: [ 20, 'Name should be between 5 and 20 characters']
     },
     email: {
       required: [ true, 'Email is required' ],

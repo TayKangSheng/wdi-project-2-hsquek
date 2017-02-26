@@ -136,19 +136,6 @@ const AlbumController = {
         }
       }
 
-      // if (toRemove) {
-      //   if (!Array.isArray(toRemove)) {
-      //     thisArr.splice(thisArr.indexOf(toRemove), 1)
-      //   } else {
-      //     toRemove.forEach(function (removeOne) {
-      //       thisArr.splice(thisArr.indexOf(removeOne), 1)
-      //     })
-      //   }
-      // }
-
-      // console.log('2')
-      // console.log(foundAlbum.photos)
-
       var originalLength = foundAlbum.photos.length
 
       // console.log(originalLength);

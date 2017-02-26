@@ -17,7 +17,7 @@ let FamilyController = {
         if (families[i].members.includes(req.user.local.email)) {
           res.render('family/index', {
             family: families[i],
-            message: families[i].id + ' ' + families[i].name
+            message: families[i].name
           })
           return
         }
@@ -48,142 +48,98 @@ let FamilyController = {
         return next(err)
       }
       newFamily.save(function (err, newFamily, next) {
-        helpers.handleValidationErr(err, res, req, '/family')
+        if (err) {
+          console.error(err)
+          return
+        }
         res.redirect('/family')
-        // res.send('family created')
       })
     })
   },
 
-  newUser: function (req, res, next) {
-    res.render('family/newuser')
-  },
-
-  createUser: function (req, res, next) {
-    let newUser = new User({
-      local: {
-        name: req.body.name,
-        email: req.body.email,
-        password: bcrypt.hashSync('password', 10)
-      }
-    })
-    newUser.save(function (err, newUser) {
-      helpers.handleValidationErr(err, res, req, '/family/newuser')
-      res.redirect('family')
-    })
-  },
-
-  pushUserForm: function (req, res, next) {
+  updateForm: function (req, res, next) {
     Family.findById(req.params.id, function (err, foundFamily, next) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      res.render('family/pushuser', {
+      res.render('family/updatefamily', {
         foundFamily: foundFamily
       })
     })
   },
 
-  pushUser: function (req, res, next) {
+  updateFamily: function (req, res, next) {
     Family.findById(req.params.id, function (err, foundFamily) {
       if (err) {
         console.error(err)
         return next(err)
       }
-      // let newUser = new User({
-      //   local: {
-      //     name: req.body.name,
-      //     email: req.body.email,
-      //     password: bcrypt.hashSync('password', 10)
-      //   },
-      //   familyGroup: req.user.familyGroup
-      // })
-      // foundFamily.members.push(newUser.local.email)
-      // newUser.save()
-      // foundFamily.save()
-      // res.redirect('/family')
-      let newUser = {
-        local: {
-          name: req.body.name,
-          email: req.body.email,
-          password: User.encrypt('password')
-        },
-        familyGroup: req.user.familyGroup
-      }
 
-      User.create(newUser, function (err, output) {
-        if (err) {
-          console.log(err)
-          if (err.name === 'ValidationError') {
-            let errMessages = []
-            for (var field in err.errors) {
-              errMessages.push(err.errors[field].message)
+      var toRemove = req.body.pullMembers
+      var thisArr = foundFamily.members
+
+      if (toRemove) {
+        if (!Array.isArray(toRemove)) {
+          let idx = (function () {
+            for (var i = 0; i < thisArr.length; i++) {
+              if (thisArr[i] === toRemove) {
+                return i
+              }
             }
+          })()
 
-            req.flash('flash', {
-              type: 'danger',
-              message: errMessages
-            })
-            res.redirect('/')
+          thisArr.splice(idx, 1)
+        } else {
+          var spliceIdxArr = []
+          for (var j = 0; j < toRemove.length; j++) {
+            for (var n = 0; n < thisArr.length; n++) {
+              if (thisArr[n] === toRemove[j]) {
+                if (!spliceIdxArr.includes(n)) {
+                  spliceIdxArr.push(n)
+                }
+              }
+            }
           }
-
-          return next(err)
+          spliceIdxArr.sort()
+          for (var x = spliceIdxArr.length - 1; x >= 0; x--) {
+            thisArr.splice(spliceIdxArr[x], 1)
+          }
         }
+      }
 
-        foundFamily.members.push(newUser.local.email)
-        foundFamily.save()
-        req.flash('flash', {
-          type: 'success',
-          message: 'Created user with email: ' + output.email
+      if (req.body.email) {
+        foundFamily.members.push(req.body.email)
+        let newUser = new User({
+          local: {
+            email: req.body.email,
+            password: User.encrypt('password', 10)
+          },
+          familyGroup: req.user.familyGroup
         })
-        res.redirect('/')
-      })
-    })
-  },
 
-  deleteUserForm: function (req, res, next) {
-    Family.findById(req.params.id, function (err, foundFamily, next) {
-      if (err) {
-        console.error(err)
-        return next(err)
+        newUser.save()
       }
-      res.render('family/removeuser', {
-        foundFamily: foundFamily
-      })
-    })
-  },
 
-  deleteUser: function (req, res, next) {
-    if (req.user.local.email === req.body.email) {
-      req.flash('flash', {
-        type: 'warning',
-        message: 'cannot remove self'
-      })
-      res.render('home', {
-        flash: req.flash('flash')[0]
-      })
-    }
-
-    Family.findByIdAndUpdate(req.params.id, {
-      $pull: { members: req.body.email }
-    }, function (err, foundFamily, next) {
-      if (err) {
-        console.error(err)
-        return next(err)
-      }
-      req.flash('flash', {
-        type: 'success',
-        message: 'user deleted'
-      })
-      res.render('home', {
-        flash: req.flash('flash')[0]
-      })
+      // console.log(foundFamily.members);
+      foundFamily.save()
+      res.redirect('/family')
     })
   },
 
   changePasswordForm: function (req, res, next) {
     // enable user to change password (do after mvp is done)
+  },
+
+  deleteFamily: function (req, res, next) {
+    Family.findByIdAndRemove(req.params.id, function (err, output, next) {
+      if (err) {
+        console.error(err)
+        return next(err)
+      }
+
+      res.redirect('/family')
+    })
   }
 
 }

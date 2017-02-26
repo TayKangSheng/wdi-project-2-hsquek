@@ -1,4 +1,4 @@
-<h1>Family Account Management</h1>
+<h1>Family Account Management</h1><a href="/family/create" class="btn btn-primary" style="float: right">Create</a>
 
 
 
@@ -10,8 +10,12 @@
 <% } %>
 
 <% if (family) { %>
-<a class="btn btn-primary" href="/family/<%= family.id %>/pushuser">Update users</a>
-<a class="btn btn-primary" href="/family/<%= family.id %>/deleteuser">Delete user</a>
+<a class="btn btn-primary" href="/family/<%= family.id %>/update">Update family</a>
+<form method="POST" action="/family/<%= family.id%>?_method=DELETE">
+<button class="btn btn-danger" type="submit">
+  Delete family
+  </button>
+</form>
 
 <% } else { %>
 
