@@ -121,7 +121,6 @@ let EventController = {
               }
             }
           })()
-
           thisArr.splice(idx, 1)
         } else {
           var spliceIdxArr = []
