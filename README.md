@@ -32,8 +32,10 @@ Root is a site that helps family members to plan events and share photos. Member
 #### family account management
 ![fam](http://i.imgur.com/hwIkvBg.jpg)
 
+## Improvements
 
-
+* New users to be able to update password (currently defaults to 'password')
+* To let users create and see that they belong to more than 1 family group.
 
 
 ## Acknowledgments
